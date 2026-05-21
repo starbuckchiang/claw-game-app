@@ -1,0 +1,1252 @@
+<meta itemprop="name" content="我要徵求東西(二手物品)"><!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>甜心夾娃娃機</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #ffe6f2 0%, #fff7fb 100%);
+      color: #5a3d4d;
+      overflow-x: hidden;
+    }
+
+    .game-wrap {
+      max-width: 860px;
+      margin: 24px auto;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .title-animated {
+      animation: floatTitle 2.4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes floatTitle {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-4px) scale(1.02); }
+    }
+
+    .subtitle {
+      margin-top: 0;
+      color: #8b6678;
+      line-height: 1.6;
+    }
+
+    .hud {
+      background: #fff;
+      border: 3px solid #f8bfd8;
+      border-radius: 18px;
+      padding: 12px 16px;
+      margin: 16px auto 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 8px 20px rgba(255, 163, 196, 0.2);
+    }
+
+    #message {
+      font-weight: bold;
+      color: #d45c92;
+    }
+
+    .layout {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .machine {
+      width: 440px;
+      max-width: 100%;
+      background: #fff;
+      border: 6px solid #f4a9ca;
+      border-radius: 24px;
+      padding: 14px 14px 18px;
+      box-shadow: 0 16px 30px rgba(225, 131, 175, 0.25);
+      position: relative;
+      overflow: visible;
+    }
+
+    .showcase {
+      width: 220px;
+      max-width: 100%;
+      background: #fff;
+      border: 6px solid #f8bfd8;
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: 0 16px 30px rgba(225, 131, 175, 0.18);
+      text-align: center;
+    }
+
+    .showcase h3 {
+      margin-top: 4px;
+      margin-bottom: 12px;
+      color: #d45c92;
+    }
+
+    .showcase-grid {
+      min-height: 180px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      justify-items: center;
+      align-items: center;
+      background: linear-gradient(180deg, #fffafc 0%, #fff0f6 100%);
+      border: 3px dashed #f6c2d9;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .showcase-item {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      animation: popIn 0.35s ease;
+    }
+
+    .showcase-empty {
+      grid-column: 1 / -1;
+      color: #b8899e;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .top-bar {
+      width: 100%;
+      height: 18px;
+      background: repeating-linear-gradient(
+        45deg,
+        #ffd3e6,
+        #ffd3e6 12px,
+        #ffc1da 12px,
+        #ffc1da 24px
+      );
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .claw-track {
+      position: relative;
+      height: 70px;
+      z-index: 20;
+      overflow: visible;
+    }
+
+    .claw-arm {
+      position: absolute;
+      top: 0;
+      left: 180px;
+      width: 70px;
+      transition: left 0.2s ease;
+      z-index: 30;
+    }
+
+    .claw-head {
+      width: 42px;
+      height: 14px;
+      margin: 0 auto;
+      background: #ff89b5;
+      border-radius: 999px;
+    }
+
+    .claw-arm::before {
+      content: "";
+      display: block;
+      width: 4px;
+      height: 22px;
+      background: #9c7b8b;
+      margin: 0 auto;
+    }
+
+    .claw {
+      position: relative;
+      width: 40px;
+      height: 30px;
+      margin: 0 auto;
+      z-index: 35;
+    }
+
+    .finger {
+      position: absolute;
+      top: 0;
+      width: 12px;
+      height: 24px;
+      border: 4px solid #8e6f7f;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      background: transparent;
+      transition: transform 0.2s ease;
+    }
+
+    .finger.left {
+      left: 2px;
+      transform: rotate(12deg);
+    }
+
+    .finger.right {
+      right: 2px;
+      transform: rotate(-12deg);
+    }
+
+    .claw.closed .finger.left {
+      transform: rotate(4deg);
+    }
+
+    .claw.closed .finger.right {
+      transform: rotate(-4deg);
+    }
+
+    .play-area {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(180deg, #fffafc 0%, #ffeef5 100%);
+      border: 4px solid #ffd0e3;
+      border-radius: 18px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .play-area::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: #ffd7e8;
+      z-index: 2;
+    }
+
+    .prize {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      transition: all 0.4s ease;
+      user-select: none;
+      object-fit: contain;
+      z-index: 5;
+    }
+
+    .prize.shaking {
+      animation: wiggle 0.35s ease;
+    }
+
+    @keyframes wiggle {
+      0% { transform: translateX(0px) rotate(0deg); }
+      20% { transform: translateX(-3px) rotate(-4deg); }
+      40% { transform: translateX(3px) rotate(4deg); }
+      60% { transform: translateX(-2px) rotate(-3deg); }
+      80% { transform: translateX(2px) rotate(3deg); }
+      100% { transform: translateX(0px) rotate(0deg); }
+    }
+
+    .prize.caught { z-index: 25; }
+
+    .prize-slot {
+      width: 74px;
+      height: 42px;
+      background: #ffb3d1;
+      color: #fff;
+      border-radius: 0 0 14px 14px;
+      margin-top: 10px;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .controls {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .controls.secondary { margin-top: 10px; }
+
+    button {
+      border: none;
+      background: #ff8fbc;
+      color: white;
+      font-size: 16px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(236, 113, 164, 0.25);
+      transition: transform 0.12s ease, opacity 0.2s ease;
+      min-width: 96px;
+    }
+
+    button:hover { transform: translateY(-2px); }
+    button:active { transform: scale(0.98); }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .coin-btn { background: #ffb347; }
+    .coin-btn.active { background: #ff8a00; }
+
+    .hint {
+      font-size: 13px;
+      color: #8b6678;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .start-screen,
+    .end-screen,
+    .wanted-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 228, 241, 0.96), rgba(255, 245, 250, 0.97));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .end-screen,
+    .wanted-screen {
+      display: none;
+    }
+
+    .menu-wrap {
+      width: min(96vw, 980px);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .entry-card,
+    .end-card,
+    .wanted-card-panel {
+      background: #fff;
+      border: 4px solid #f8bfd8;
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: 0 18px 40px rgba(225, 131, 175, 0.25);
+      text-align: center;
+    }
+
+    .entry-card {
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .entry-icon {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .entry-card h2,
+    .end-card h2,
+    .wanted-card-panel h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      color: #d45c92;
+      animation: floatTitle 2.2s ease-in-out infinite;
+    }
+
+    .entry-card p,
+    .end-card p,
+    .wanted-card-panel p {
+      color: #8b6678;
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .start-btn {
+      background: linear-gradient(90deg, #ff93c2, #ffb36c);
+      font-size: 18px;
+      padding: 14px 24px;
+      min-width: 160px;
+    }
+
+    .secondary-btn {
+      background: linear-gradient(90deg, #ffb7cf, #ffc9a6);
+      font-size: 18px;
+      padding: 14px 24px;
+      min-width: 160px;
+    }
+
+    .wanted-list {
+      text-align: left;
+      background: linear-gradient(180deg, #fffafc 0%, #fff0f6 100%);
+      border: 2px solid #f8bfd8;
+      border-radius: 18px;
+      padding: 16px;
+      margin: 18px 0;
+      color: #7b5b6b;
+      line-height: 1.9;
+    }
+
+    .wanted-list strong {
+      color: #d45c92;
+    }
+
+    .wanted-form {
+      margin-top: 18px;
+      text-align: left;
+      background: #fff7fb;
+      border: 2px solid #f8bfd8;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .wanted-form h3 {
+      margin: 0 0 12px;
+      color: #d45c92;
+      text-align: center;
+    }
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .wanted-form label {
+      font-size: 14px;
+      color: #7b5b6b;
+      font-weight: bold;
+    }
+
+    .wanted-form input,
+    .wanted-form textarea {
+      width: 100%;
+      border: 2px solid #f3c2d8;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: white;
+    }
+
+    .wanted-form textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-note {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #9a7486;
+      line-height: 1.6;
+    }
+
+    .form-submit-wrap {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .particle-layer {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 998;
+    }
+
+    .particle {
+      position: absolute;
+      font-size: 22px;
+      animation: burstUp 1.2s ease-out forwards;
+      opacity: 0.95;
+    }
+
+    @keyframes burstUp {
+      0% {
+        transform: translate(0, 0) scale(0.8) rotate(0deg);
+        opacity: 0.95;
+      }
+      100% {
+        transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .game-wrap {
+        padding: 12px;
+        margin: 10px auto;
+      }
+
+      h1 { font-size: 24px; }
+      .subtitle { font-size: 14px; }
+
+      .hud {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      .machine {
+        width: 100%;
+        max-width: 360px;
+        padding: 10px 10px 14px;
+      }
+
+      .showcase {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .top-bar { height: 14px; }
+      .claw-track { height: 60px; }
+
+      .claw-arm {
+        left: 140px;
+        width: 64px;
+      }
+
+      .claw-head {
+        width: 38px;
+        height: 12px;
+      }
+
+      .claw-arm::before { height: 18px; }
+
+      .claw {
+        width: 34px;
+        height: 26px;
+      }
+
+      .finger {
+        width: 10px;
+        height: 20px;
+        border-width: 3px;
+      }
+
+      .play-area { height: 280px; }
+      .play-area::after { height: 34px; }
+
+      .prize {
+        width: 42px;
+        height: 42px;
+      }
+
+      .showcase-item {
+        width: 54px;
+        height: 54px;
+      }
+
+      .prize-slot {
+        width: 64px;
+        height: 38px;
+        font-size: 14px;
+      }
+
+      .controls { gap: 8px; }
+
+      .controls button {
+        flex: 1 1 30%;
+        max-width: 110px;
+      }
+
+      .coin-btn {
+        width: 100%;
+        max-width: 220px;
+        font-size: 18px;
+      }
+
+      button {
+        font-size: 15px;
+        padding: 12px 14px;
+      }
+
+      .hint { font-size: 12px; }
+
+      .menu-wrap {
+        grid-template-columns: 1fr;
+        width: min(95vw, 460px);
+      }
+
+      .entry-card,
+      .end-card,
+      .wanted-card-panel {
+        min-height: auto;
+      }
+
+      .entry-card h2,
+      .end-card h2,
+      .wanted-card-panel h2 {
+        font-size: 24px;
+      }
+
+      .wanted-list,
+      .wanted-form {
+        font-size: 14px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="particleLayer" class="particle-layer"></div>
+
+  <div id="startScreen" class="start-screen">
+    <div class="menu-wrap">
+      <div class="entry-card">
+        <div>
+          <div class="entry-icon">🎀</div>
+          <h2>甜心夾娃娃機</h2>
+          <p>
+            先投幣，再出手！<br>
+            每一枚硬幣只能夾一次，試試今天的手氣吧 ✨
+          </p>
+        </div>
+        <div>
+          <button id="enterGameBtn" class="start-btn">開始遊戲</button>
+        </div>
+      </div>
+
+      <div class="entry-card">
+        <div>
+          <div class="entry-icon">🎁</div>
+          <h2>我要徵求東西（二手物品）</h2>
+          <p>
+            如果你家裡有保存良好、暫時用不到的好物，<br>
+            歡迎一起分享，讓它找到下一位需要它、喜歡它的新主人 ♡
+          </p>
+        </div>
+        <div>
+          <button id="openWantedBtn" class="secondary-btn">查看徵求</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="wantedScreen" class="wanted-screen">
+    <div class="wanted-card-panel">
+      <h2>🎁 我要徵求東西（二手物品）</h2>
+      <p>
+        如果你家裡有保存良好、暫時用不到的好物，<br>
+        都歡迎讓它找到下一位需要它、喜歡它的新主人 ♡
+      </p>
+
+      <div class="wanted-list">
+        <strong>目前徵求：</strong><br>
+        冰刀鞋、鞋套、旋轉板、面紙盒套、絨毛娃娃、T-shirt、夾克、hockey 球鞋與相關裝備。
+      </div>
+
+      <form
+        class="wanted-form"
+        action="https://docs.google.com/forms/d/e/1FAIpQLScKLkUyuTR-5kYBmE6f52bGD7I3jivZ5ah8HSFgaGxA6Q7U4w/formResponse"
+        method="POST"
+        target="_blank"
+      >
+        <h3>填寫徵求表單</h3>
+
+        <div class="form-row">
+          <label for="wanted-desc">徵求物品敘述</label>
+          <textarea
+            id="wanted-desc"
+            name="entry.973854663"
+            placeholder="例如：想徵求 23cm 冰刀鞋，保存良好、顏色不限。"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-row">
+          <label for="wanted-image">圖片連結</label>
+          <input
+            id="wanted-image"
+            type="text"
+            name="entry.936283346"
+            placeholder="請貼上圖片網址，例如 Google Drive / Imgur 連結"
+          />
+          <div class="form-note">GitHub Pages 無法直接存圖片，建議貼雲端圖片連結。</div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="wanted-nickname">暱稱</label>
+            <input
+              id="wanted-nickname"
+              type="text"
+              name="entry.24028156"
+              placeholder="請輸入暱稱"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="wanted-contact">電話或通訊軟體帳號</label>
+            <input
+              id="wanted-contact"
+              type="text"
+              name="entry.244490545"
+              placeholder="例如：LINE / 電話 / IG"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="wanted-date">日期</label>
+            <input id="wanted-date" type="date" required />
+          </div>
+
+          <div class="form-row">
+            <label for="wanted-time">時間</label>
+            <input id="wanted-time" type="time" required />
+          </div>
+        </div>
+
+        <!-- Google Form 日期隱藏欄位 -->
+        <input type="hidden" name="entry.1533264183_year" id="gf-date-year" />
+        <input type="hidden" name="entry.1533264183_month" id="gf-date-month" />
+        <input type="hidden" name="entry.1533264183_day" id="gf-date-day" />
+
+        <!-- Google Form 時間隱藏欄位 -->
+        <input type="hidden" name="entry.1943315019_hour" id="gf-time-hour" />
+        <input type="hidden" name="entry.1943315019_minute" id="gf-time-minute" />
+
+        <div class="form-submit-wrap">
+          <button type="submit" class="secondary-btn">送出徵求</button>
+        </div>
+      </form>
+
+      <div class="controls">
+        <button id="backHomeBtn" class="secondary-btn" type="button">回首頁</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="endScreen" class="end-screen">
+    <div class="end-card">
+      <h2>🏆 遊戲結束！</h2>
+      <p id="endText">你今天夾到了好多可愛娃娃～</p>
+      <button id="playAgainBtn" class="start-btn">再玩一次</button>
+    </div>
+  </div>
+
+  <div class="game-wrap">
+    <h1><span class="title-animated">🎀 可愛夾娃娃機 🎀</span></h1>
+    <p class="subtitle">先投幣，再移動夾子，把娃娃夾回家吧！</p>
+
+    <div class="hud">
+      <div>分數：<span id="score">0</span></div>
+      <div>剩餘娃娃：<span id="remaining">0</span></div>
+      <div>幣數：<span id="coins">0</span></div>
+      <div>可夾次數：<span id="chances">0</span></div>
+      <div id="message">先按「投幣開始」吧～</div>
+    </div>
+
+    <div class="layout">
+      <div class="machine">
+        <div class="top-bar"></div>
+
+        <div class="claw-track">
+          <div id="clawArm" class="claw-arm">
+            <div class="claw-head"></div>
+            <div id="claw" class="claw">
+              <span class="finger left"></span>
+              <span class="finger right"></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="playArea" class="play-area"></div>
+
+        <div class="prize-slot">
+          <span>出口</span>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <h3>🎁 中獎展示櫃</h3>
+        <div id="showcaseGrid" class="showcase-grid">
+          <div class="showcase-empty">還沒有夾到娃娃喔～</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="coinBtn" class="coin-btn">🪙 投幣開始</button>
+    </div>
+
+    <div class="controls">
+      <button id="leftBtn" disabled>⬅ 左移</button>
+      <button id="dropBtn" disabled>🕹 下爪</button>
+      <button id="rightBtn" disabled>右移 ➡</button>
+    </div>
+
+    <div class="controls secondary">
+      <button id="resetBtn">重新開始</button>
+    </div>
+
+    <div class="hint">
+      小提醒：背景音樂第一次通常要你先按一下按鈕，瀏覽器才會播放。
+    </div>
+  </div>
+
+  <audio id="bgm" src="sounds/bgm.mp3" loop></audio>
+  <audio id="catchSound" src="sounds/catch.mp3"></audio>
+  <audio id="startSound" src="sounds/start.mp3"></audio>
+
+  <script>
+    const clawArm = document.getElementById("clawArm");
+    const claw = document.getElementById("claw");
+    const playArea = document.getElementById("playArea");
+    const showcaseGrid = document.getElementById("showcaseGrid");
+    const prizes = () => Array.from(document.querySelectorAll(".prize:not(.won)"));
+
+    const leftBtn = document.getElementById("leftBtn");
+    const rightBtn = document.getElementById("rightBtn");
+    const dropBtn = document.getElementById("dropBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const coinBtn = document.getElementById("coinBtn");
+
+    const enterGameBtn = document.getElementById("enterGameBtn");
+    const openWantedBtn = document.getElementById("openWantedBtn");
+    const backHomeBtn = document.getElementById("backHomeBtn");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+
+    const startScreen = document.getElementById("startScreen");
+    const wantedScreen = document.getElementById("wantedScreen");
+    const endScreen = document.getElementById("endScreen");
+    const endText = document.getElementById("endText");
+    const particleLayer = document.getElementById("particleLayer");
+
+    const scoreEl = document.getElementById("score");
+    const remainingEl = document.getElementById("remaining");
+    const messageEl = document.getElementById("message");
+    const coinsEl = document.getElementById("coins");
+    const chancesEl = document.getElementById("chances");
+
+    const bgm = document.getElementById("bgm");
+    const catchSound = document.getElementById("catchSound");
+    const startSound = document.getElementById("startSound");
+
+    const wantedDate = document.getElementById("wanted-date");
+    const wantedTime = document.getElementById("wanted-time");
+    const gfDateYear = document.getElementById("gf-date-year");
+    const gfDateMonth = document.getElementById("gf-date-month");
+    const gfDateDay = document.getElementById("gf-date-day");
+    const gfTimeHour = document.getElementById("gf-time-hour");
+    const gfTimeMinute = document.getElementById("gf-time-minute");
+
+    let clawX = 180;
+    let busy = false;
+    let score = 0;
+    let coins = 0;
+    let chances = 0;
+    let canPlay = false;
+    let wonItems = [];
+
+    let minX = 10;
+    let maxX = 350;
+    let step = 28;
+
+    function isMobile() {
+      return window.innerWidth <= 700;
+    }
+
+    function applyResponsiveSettings() {
+      if (isMobile()) {
+        clawX = Math.min(clawX, 280);
+        minX = 6;
+        maxX = 280;
+        step = 22;
+      } else {
+        minX = 10;
+        maxX = 350;
+        step = 28;
+      }
+      updateClawPosition();
+    }
+
+    function updateHUD() {
+      scoreEl.textContent = score;
+      remainingEl.textContent = prizes().length;
+      coinsEl.textContent = coins;
+      chancesEl.textContent = chances;
+    }
+
+    function setMessage(text) {
+      messageEl.textContent = text;
+    }
+
+    function updateClawPosition() {
+      clawArm.style.left = `${clawX}px`;
+    }
+
+    function updateControls() {
+      const enabled = canPlay && !busy && prizes().length > 0 && chances > 0;
+      leftBtn.disabled = !enabled;
+      rightBtn.disabled = !enabled;
+      dropBtn.disabled = !enabled;
+    }
+
+    function moveLeft() {
+      if (!canPlay || busy || chances <= 0) return;
+      clawX = Math.max(minX, clawX - step);
+      updateClawPosition();
+      jiggleRemainingPrizes();
+    }
+
+    function moveRight() {
+      if (!canPlay || busy || chances <= 0) return;
+      clawX = Math.min(maxX, clawX + step);
+      updateClawPosition();
+      jiggleRemainingPrizes();
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function getClawCenterX() {
+      return clawX + (isMobile() ? 30 : 35);
+    }
+
+    function findNearbyPrize() {
+      const available = prizes();
+      const clawCenter = getClawCenterX();
+
+      let target = null;
+      let bestDistance = Infinity;
+
+      for (const prize of available) {
+        const prizeX = parseInt(prize.style.left) + (isMobile() ? 21 : 27);
+        const distance = Math.abs(prizeX - clawCenter);
+
+        if (distance < bestDistance && distance < (isMobile() ? 34 : 42)) {
+          bestDistance = distance;
+          target = prize;
+        }
+      }
+
+      return target;
+    }
+
+    async function playBgm() {
+      try {
+        bgm.volume = 0.35;
+        await bgm.play();
+      } catch (e) {
+        console.log("BGM autoplay blocked:", e);
+      }
+    }
+
+    function playSound(audio, volume = 1) {
+      audio.currentTime = 0;
+      audio.volume = volume;
+      audio.play().catch(() => {});
+    }
+
+    function burstParticles(x, y, symbols = ["💖","✨","⭐"]) {
+      for (let i = 0; i < 10; i++) {
+        const el = document.createElement("span");
+        el.className = "particle";
+        el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+        el.style.setProperty("--dx", `${(Math.random() * 160 - 80).toFixed(0)}px`);
+        el.style.setProperty("--dy", `${(-60 - Math.random() * 120).toFixed(0)}px`);
+        particleLayer.appendChild(el);
+        setTimeout(() => el.remove(), 1200);
+      }
+    }
+
+    function burstCenter(symbols) {
+      burstParticles(window.innerWidth / 2, window.innerHeight / 2, symbols);
+    }
+
+    function jiggleRemainingPrizes() {
+      prizes().forEach((prize, index) => {
+        setTimeout(() => {
+          prize.classList.remove("shaking");
+          void prize.offsetWidth;
+          prize.classList.add("shaking");
+        }, index * 40);
+      });
+    }
+
+    function renderShowcase() {
+      if (wonItems.length === 0) {
+        showcaseGrid.innerHTML = `<div class="showcase-empty">還沒有夾到娃娃喔～</div>`;
+        return;
+      }
+
+      showcaseGrid.innerHTML = wonItems
+        .map(src => `<img class="showcase-item" src="${src}" alt="won item">`)
+        .join("");
+    }
+
+    function addToShowcase(src) {
+      wonItems.push(src);
+      renderShowcase();
+    }
+
+    function insertCoin() {
+      if (busy) return;
+      coins += 1;
+      chances = 1;
+      canPlay = true;
+      coinBtn.classList.add("active");
+      playSound(startSound, 0.8);
+      playBgm();
+      setMessage("已投幣，這次只有一次機會喔！");
+      burstCenter(["💖","✨","🪙","⭐"]);
+      jiggleRemainingPrizes();
+      updateHUD();
+      updateControls();
+    }
+
+    function maybeShowEndScreen() {
+      if (prizes().length === 0) {
+        endText.textContent = `你總共夾到了 ${score} 隻可愛娃娃，太厲害啦！`;
+        endScreen.style.display = "flex";
+        burstCenter(["🏆","💖","✨","⭐"]);
+      }
+    }
+
+    async function dropClaw() {
+      if (!canPlay || busy || chances <= 0) return;
+
+      if (prizes().length === 0) {
+        setMessage("娃娃都被你夾光啦 ✨");
+        return;
+      }
+
+      busy = true;
+      updateControls();
+      setMessage("夾爪下降中...");
+      clawArm.style.zIndex = "99";
+      claw.classList.add("closed");
+      jiggleRemainingPrizes();
+
+      clawArm.style.transition = "left 0.2s ease, transform 1s ease";
+      clawArm.style.transform = isMobile()
+        ? "translateY(150px)"
+        : "translateY(185px)";
+
+      await sleep(1000);
+
+      const target = findNearbyPrize();
+      let success = false;
+
+      if (target) {
+        success = Math.random() < 0.2;
+      }
+
+      chances = 0;
+      updateHUD();
+
+      if (success && target) {
+        setMessage("夾到了！帶回出口中 🎉");
+        playSound(catchSound, 0.9);
+        target.classList.add("caught");
+        target.style.left = isMobile() ? `${clawX + 6}px` : `${clawX + 8}px`;
+        target.style.top = isMobile() ? "170px" : "205px";
+      } else {
+        setMessage("這次沒夾到，下次再來～");
+      }
+
+      await sleep(500);
+
+      clawArm.style.transform = "translateY(0px)";
+      await sleep(1000);
+
+      if (success && target) {
+        const wonSrc = target.getAttribute("src");
+        target.style.left = isMobile() ? "280px" : "350px";
+        target.style.top = isMobile() ? "235px" : "295px";
+        await sleep(450);
+        target.classList.add("won");
+        target.style.opacity = "0.15";
+        score += 1;
+        addToShowcase(wonSrc);
+        setMessage("成功拿到娃娃啦 🤍");
+        burstCenter(["💖","✨","⭐","💫"]);
+      }
+
+      claw.classList.remove("closed");
+      clawArm.style.transition = "left 0.2s ease";
+      clawArm.style.zIndex = "30";
+      busy = false;
+      canPlay = false;
+      coinBtn.classList.remove("active");
+
+      updateHUD();
+
+      if (prizes().length === 0) {
+        setMessage("恭喜你，全數收服！🏆");
+      }
+
+      updateControls();
+      maybeShowEndScreen();
+    }
+
+    function renderPrizes() {
+      if (isMobile()) {
+        playArea.innerHTML = `
+          <img class="prize" src="images/bear.png" style="left: 38px; top: 180px;" alt="bear" />
+          <img class="prize" src="images/bunny.png" style="left: 92px; top: 200px;" alt="bunny" />
+          <img class="prize" src="images/chick.png" style="left: 145px; top: 180px;" alt="chick" />
+          <img class="prize" src="images/cat.png" style="left: 198px; top: 200px;" alt="cat" />
+          <img class="prize" src="images/gift.png" style="left: 252px; top: 180px;" alt="gift" />
+        `;
+      } else {
+        playArea.innerHTML = `
+          <img class="prize" src="images/bear.png" style="left: 70px; top: 220px;" alt="bear" />
+          <img class="prize" src="images/bunny.png" style="left: 140px; top: 240px;" alt="bunny" />
+          <img class="prize" src="images/chick.png" style="left: 205px; top: 220px;" alt="chick" />
+          <img class="prize" src="images/cat.png" style="left: 270px; top: 240px;" alt="cat" />
+          <img class="prize" src="images/gift.png" style="left: 335px; top: 220px;" alt="gift" />
+        `;
+      }
+    }
+
+    function resetGame() {
+      renderPrizes();
+      score = 0;
+      coins = 0;
+      chances = 0;
+      wonItems = [];
+      canPlay = false;
+      busy = false;
+      clawX = isMobile() ? 140 : 180;
+      coinBtn.classList.remove("active");
+      claw.classList.remove("closed");
+      clawArm.style.zIndex = "30";
+      endScreen.style.display = "none";
+      renderShowcase();
+      applyResponsiveSettings();
+      updateHUD();
+      updateControls();
+      setMessage("先按「投幣開始」吧～");
+    }
+
+    function syncDateTimeToGoogleForm() {
+      if (wantedDate.value) {
+        const [year, month, day] = wantedDate.value.split("-");
+        gfDateYear.value = year || "";
+        gfDateMonth.value = month || "";
+        gfDateDay.value = day || "";
+      }
+
+      if (wantedTime.value) {
+        const [hour, minute] = wantedTime.value.split(":");
+        gfTimeHour.value = hour || "";
+        gfTimeMinute.value = minute || "";
+      }
+    }
+
+    wantedDate.addEventListener("change", syncDateTimeToGoogleForm);
+    wantedTime.addEventListener("change", syncDateTimeToGoogleForm);
+
+    enterGameBtn.addEventListener("click", () => {
+      startScreen.style.display = "none";
+      wantedScreen.style.display = "none";
+      playSound(startSound, 0.8);
+      playBgm();
+      burstCenter(["💖","✨","⭐"]);
+    });
+
+    openWantedBtn.addEventListener("click", () => {
+      startScreen.style.display = "none";
+      wantedScreen.style.display = "flex";
+      burstCenter(["🎁","✨","💖"]);
+    });
+
+    backHomeBtn.addEventListener("click", () => {
+      wantedScreen.style.display = "none";
+      startScreen.style.display = "flex";
+    });
+
+    playAgainBtn.addEventListener("click", () => {
+      resetGame();
+      endScreen.style.display = "none";
+      startScreen.style.display = "flex";
+    });
+
+    coinBtn.addEventListener("click", insertCoin);
+    leftBtn.addEventListener("click", moveLeft);
+    rightBtn.addEventListener("click", moveRight);
+    dropBtn.addEventListener("click", dropClaw);
+    resetBtn.addEventListener("click", resetGame);
+
+    document.addEventListener("keydown", (e) => {
+      if (
+        startScreen.style.display !== "none" ||
+        wantedScreen.style.display !== "none" ||
+        endScreen.style.display !== "none"
+      ) return;
+
+      if (e.key === "ArrowLeft") moveLeft();
+      if (e.key === "ArrowRight") moveRight();
+      if ((e.key === " " || e.key === "Enter") && canPlay && chances > 0) {
+        e.preventDefault();
+        dropClaw();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      const oldMobile = window.__lastMobileState;
+      const newMobile = isMobile();
+
+      if (oldMobile !== newMobile) {
+        resetGame();
+      } else {
+        applyResponsiveSettings();
+      }
+
+      window.__lastMobileState = newMobile;
+    });
+
+    window.__lastMobileState = isMobile();
+    renderPrizes();
+    renderShowcase();
+    clawX = isMobile() ? 140 : 180;
+    applyResponsiveSettings();
+    updateHUD();
+    updateControls();
+  </script>
+</body>
+</html>
