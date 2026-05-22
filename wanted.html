@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冰場好物徵求站</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #eef8ff 0%, #fff7fb 100%);
+      color: #4f4150;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #fff6fb 100%);
+      border: 4px solid #d8eefc;
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: 0 14px 30px rgba(150, 190, 220, 0.18);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      color: #d45c92;
+      font-size: 34px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #7a6876;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(90deg, #ff98c4, #ffb68a);
+      box-shadow: 0 6px 14px rgba(236, 113, 164, 0.22);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .board {
+      background: #fff;
+      border: 4px solid #f5cfe0;
+      border-radius: 24px;
+      padding: 20px 18px;
+      box-shadow: 0 14px 28px rgba(232, 171, 198, 0.18);
+    }
+
+    .board-title {
+      margin: 0 0 8px;
+      color: #d45c92;
+      font-size: 24px;
+    }
+
+    .board-sub {
+      color: #8c7483;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff8fc;
+      border: 2px dashed #f3c9dc;
+      color: #8b7080;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .debug-box {
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f8fbff;
+      border: 2px dashed #cfe4f5;
+      color: #5d6b78;
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
+      border: 2px solid #f4d4e2;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 18px rgba(226, 182, 201, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      color: #c84f87;
+    }
+
+    .card-desc {
+      margin: 0;
+      color: #6e5b67;
+      line-height: 1.8;
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      background: #fff;
+      border: 1px dashed #edc6d8;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .meta-item {
+      font-size: 13px;
+      color: #745f6c;
+      line-height: 1.6;
+    }
+
+    .meta-label {
+      font-weight: bold;
+      color: #d45c92;
+      margin-right: 6px;
+    }
+
+    .board-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .board-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1 id="pageTitle">冰場好物徵求站</h1>
+      <p id="pageSubtitle">資料讀取中...</p>
+    </section>
+
+    <section class="board">
+      <h2 class="board-title" id="boardTitle">本週熱門徵求清單</h2>
+      <div class="board-sub" id="boardSub">正在整理資料...</div>
+
+      <div id="debugBox" class="debug-box">除錯資訊載入中...</div>
+      <div id="contentArea" class="status">資料讀取中，請稍候...</div>
+
+      <div class="board-actions">
+        <a class="btn" href="./index.html?view=wanted">← 回徵求站</a>
+        <a class="btn" href="./index.html">回首頁</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const SHEET_ID = "1I6QqVPGMzMrGrcgcIgrJvnWM6WjmIzJY4OXSW8l57ew";
+    const SHEET_NAME = "表單回覆1";
+    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+    const CATEGORY_META = {
+      "skates": {
+        name: "冰刀鞋",
+        icon: "⛸",
+        desc: "這裡整理了冰刀鞋相關的徵求需求。",
+        sheetValue: "冰刀鞋"
+      },
+      "shoe-covers": {
+        name: "鞋套",
+        icon: "🧦",
+        desc: "這裡整理了鞋套相關的徵求需求。",
+        sheetValue: "鞋套"
+      },
+      "spinner": {
+        name: "旋轉板",
+        icon: "🌀",
+        desc: "這裡整理了旋轉板相關的徵求需求。",
+        sheetValue: "旋轉板"
+      },
+      "clothes": {
+        name: "服飾 / T-shirt / 夾克",
+        icon: "👕",
+        desc: "這裡整理了服飾類的徵求需求。",
+        sheetValue: "服飾 / T-shirt / 夾克"
+      },
+      "plush": {
+        name: "絨毛娃娃 / 可愛小物",
+        icon: "🧸",
+        desc: "這裡整理了娃娃與小物的徵求需求。",
+        sheetValue: "絨毛娃娃 / 可愛小物"
+      },
+      "hockey": {
+        name: "Hockey 球鞋與裝備",
+        icon: "🏒",
+        desc: "這裡整理了 hockey 相關裝備的徵求需求。",
+        sheetValue: "Hockey 球鞋與裝備"
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category") || "skates";
+
+    const categoryMeta = CATEGORY_META[category] || {
+      name: "未知分類",
+      icon: "📦",
+      desc: "目前沒有找到這個分類說明。",
+      sheetValue: ""
+    };
+
+    document.getElementById("pageTitle").textContent = `${categoryMeta.icon} ${categoryMeta.name}徵求區`;
+    document.getElementById("pageSubtitle").textContent = categoryMeta.desc;
+    document.getElementById("boardTitle").textContent = `${categoryMeta.icon} ${categoryMeta.name}｜本週熱門徵求清單`;
+    document.getElementById("boardSub").textContent = `目前網址分類代號：${category}`;
+
+    function parseGviz(text) {
+      const start = text.indexOf("{");
+      const end = text.lastIndexOf("}");
+      return JSON.parse(text.substring(start, end + 1));
+    }
+
+    function cellValue(cell) {
+      if (!cell) return "";
+      if (typeof cell.f !== "undefined" && cell.f !== null) return cell.f;
+      if (typeof cell.v !== "undefined" && cell.v !== null) return cell.v;
+      return "";
+    }
+
+    function normalizeRow(row) {
+      const cells = row.c || [];
+      return {
+        "時間戳記": cellValue(cells[0]),
+        "物品分類": String(cellValue(cells[1]) || "").trim(),
+        "日期": cellValue(cells[2]),
+        "時間": cellValue(cells[3]),
+        "徵求物品敘述": cellValue(cells[4]),
+        "圖片連結": cellValue(cells[5]),
+        "暱稱 或 呼號": cellValue(cells[6]),
+        "手機 或 通訊軟體帳號": cellValue(cells[7])
+      };
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function renderCards(rows) {
+      const contentArea = document.getElementById("contentArea");
+
+      if (!rows.length) {
+        contentArea.className = "status";
+        contentArea.innerHTML = `目前這個分類沒有符合的資料。`;
+        return;
+      }
+
+      contentArea.className = "cards";
+      contentArea.innerHTML = rows.map(item => `
+        <article class="card">
+          <h3 class="card-title">${escapeHtml(item["物品分類"] || "未分類")}</h3>
+          <p class="card-desc">${escapeHtml(item["徵求物品敘述"] || "尚未填寫敘述")}</p>
+          <div class="meta">
+            <div class="meta-item"><span class="meta-label">日期：</span>${escapeHtml(item["日期"] || "")}</div>
+            <div class="meta-item"><span class="meta-label">時間：</span>${escapeHtml(item["時間"] || "")}</div>
+            <div class="meta-item"><span class="meta-label">暱稱：</span>${escapeHtml(item["暱稱 或 呼號"] || "")}</div>
+            <div class="meta-item"><span class="meta-label">聯絡：</span>${escapeHtml(item["手機 或 通訊軟體帳號"] || "")}</div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function loadData() {
+      const debugBox = document.getElementById("debugBox");
+      const contentArea = document.getElementById("contentArea");
+
+      try {
+        const res = await fetch(GVIZ_URL);
+        const text = await res.text();
+        const json = parseGviz(text);
+
+        const allRows = (json.table.rows || []).map(normalizeRow);
+        const filteredRows = allRows.filter(
+          item => String(item["物品分類"]).trim() === categoryMeta.sheetValue
+        );
+
+        debugBox.textContent =
+          `目前網址 category = ${category}\n` +
+          `目前要比對的中文分類 = ${categoryMeta.sheetValue}\n` +
+          `全部資料筆數 = ${allRows.length}\n` +
+          `過濾後資料筆數 = ${filteredRows.length}\n\n` +
+          `所有分類值：\n` +
+          allRows.map((row, i) => `${i + 1}. ${row["物品分類"] || "(空白)"}`).join("\n");
+
+        renderCards(filteredRows);
+      } catch (error) {
+        console.error(error);
+        debugBox.textContent = `錯誤：${error.message}`;
+        contentArea.className = "status";
+        contentArea.innerHTML = `
+          目前無法讀取徵求資料。<br>
+          請稍後再試，或確認 Google Sheets 是否已開放檢視權限。
+        `;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
