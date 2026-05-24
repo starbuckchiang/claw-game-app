@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冰場好物徵求站</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #eef8ff 0%, #fff7fb 100%);
+      color: #4f4150;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #fff6fb 100%);
+      border: 4px solid #d8eefc;
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: 0 14px 30px rgba(150, 190, 220, 0.18);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      color: #d45c92;
+      font-size: 34px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #7a6876;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(90deg, #ff98c4, #ffb68a);
+      box-shadow: 0 6px 14px rgba(236, 113, 164, 0.22);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(90deg, #8bc7ff, #9fe3e8);
+      box-shadow: 0 6px 14px rgba(120, 183, 232, 0.2);
+    }
+
+    .board {
+      background: #fff;
+      border: 4px solid #f5cfe0;
+      border-radius: 24px;
+      padding: 20px 18px;
+      box-shadow: 0 14px 28px rgba(232, 171, 198, 0.18);
+    }
+
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .board-title {
+      margin: 0;
+      color: #d45c92;
+      font-size: 24px;
+    }
+
+    .board-sub {
+      color: #8c7483;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff8fc;
+      border: 2px dashed #f3c9dc;
+      color: #8b7080;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
+      border: 2px solid #f4d4e2;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 18px rgba(226, 182, 201, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-image-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #f9f2f7;
+      border: 1px solid #efd4e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-no-image {
+      color: #b68fa2;
+      font-size: 14px;
+      text-align: center;
+      padding: 16px;
+      line-height: 1.8;
+    }
+
+    .card-link {
+      color: #5b8ec9;
+      text-decoration: none;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      color: #c84f87;
+    }
+
+    .card-desc {
+      margin: 0;
+      color: #6e5b67;
+      line-height: 1.8;
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      background: #fff;
+      border: 1px dashed #edc6d8;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .meta-item {
+      font-size: 13px;
+      color: #745f6c;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .meta-label {
+      font-weight: bold;
+      color: #d45c92;
+      margin-right: 6px;
+    }
+
+    .board-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 12px;
+      color: #9d8793;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 16px 12px 30px;
+      }
+
+      .hero {
+        padding: 22px 16px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .board {
+        padding: 16px 14px;
+      }
+
+      .board-title {
+        font-size: 22px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .board-actions {
+        width: 100%;
+      }
+
+      .board-actions .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1 id="pageTitle">冰場好物徵求站</h1>
+      <p id="pageSubtitle">
+        如果你正在找冰刀鞋、鞋套、旋轉板、服飾、娃娃或裝備，
+        歡迎把需求填在下面，我們一起幫你找找看。
+      </p>
+    </section>
+
+    <section class="board">
+      <div class="board-header">
+        <div>
+          <h2 class="board-title" id="boardTitle">本週熱門徵求清單</h2>
+          <div class="board-sub" id="boardSub">正在整理這個分類的徵求資料...</div>
+        </div>
+      </div>
+
+      <div id="contentArea" class="status">資料讀取中，請稍候...</div>
+
+      <div class="board-actions">
+        <a class="btn btn-secondary" href="./index.html?view=wanted">← 回徵求站</a>
+        <a class="btn" href="./index.html">回首頁</a>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      小提醒：如果你填的是 Yahoo、蝦皮或其他商品頁網址，系統會改成「查看原始連結」，不一定直接顯示圖片。<br>
+      若想直接顯示圖片，請使用可公開開啟的 jpg / png / webp 圖片網址。
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzgq2WDR9WHHksID1BWgV8DiEhYD5gq8ijOocl3T-haz_yvrVCRoe5z7GEvgDlZduO1/exec";
+    const CACHE_TTL_MS = 3 * 60 * 1000;
+
+    const CATEGORY_META = {
+      "skates": {
+        name: "冰刀鞋",
+        icon: "⛸",
+        desc: "這裡整理了冰刀鞋相關的徵求需求，歡迎看看有沒有適合的資訊。",
+        sheetValue: "冰刀鞋"
+      },
+      "shoe-covers": {
+        name: "鞋套",
+        icon: "🧦",
+        desc: "這裡整理了鞋套相關的徵求需求，方便快速查看。",
+        sheetValue: "鞋套"
+      },
+      "spinner": {
+        name: "旋轉板",
+        icon: "🌀",
+        desc: "這裡整理了旋轉板相關的徵求需求，適合想加強練習的人。",
+        sheetValue: "旋轉板"
+      },
+      "clothes": {
+        name: "服飾 / T-shirt / 夾克",
+        icon: "👕",
+        desc: "這裡整理了冰場穿搭與服飾類的徵求需求。",
+        sheetValue: "服飾 / T-shirt / 夾克"
+      },
+      "plush": {
+        name: "絨毛娃娃 / 可愛小物",
+        icon: "🧸",
+        desc: "這裡整理了娃娃與可愛小物的徵求需求。",
+        sheetValue: "絨毛娃娃 / 可愛小物"
+      },
+      "hockey": {
+        name: "Hockey 球鞋與裝備",
+        icon: "🏒",
+        desc: "這裡整理了 hockey 相關裝備與鞋類的徵求需求。",
+        sheetValue: "Hockey 球鞋與裝備"
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category") || "skates";
+
+    const categoryMeta = CATEGORY_META[category] || {
+      name: "未知分類",
+      icon: "📦",
+      desc: "目前沒有找到這個分類的說明。",
+      sheetValue: ""
+    };
+
+    document.getElementById("pageTitle").textContent = `${categoryMeta.icon} ${categoryMeta.name}徵求區`;
+    document.getElementById("pageSubtitle").textContent = categoryMeta.desc;
+    document.getElementById("boardTitle").textContent = `${categoryMeta.icon} ${categoryMeta.name}｜本週熱門徵求清單`;
+    document.getElementById("boardSub").textContent = `目前顯示分類：${categoryMeta.name}`;
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function isDirectImageUrl(url) {
+      if (!url) return false;
+
+      try {
+        const parsed = new URL(url);
+        return /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(parsed.pathname);
+      } catch {
+        return false;
+      }
+    }
+
+    function isLikelyWebPageUrl(url) {
+      if (!url) return false;
+
+      try {
+        const parsed = new URL(url);
+        return /^https?:$/i.test(parsed.protocol);
+      } catch {
+        return false;
+      }
+    }
+
+    function renderImageBlock(rawUrl) {
+      const imageUrl = String(rawUrl || "").trim();
+
+      if (isDirectImageUrl(imageUrl)) {
+        return `
+          <div class="card-image-wrap">
+            <img src="${escapeHtml(imageUrl)}" alt="徵求圖片" loading="lazy" />
+          </div>
+        `;
+      }
+
+      if (isLikelyWebPageUrl(imageUrl)) {
+        return `
+          <div class="card-image-wrap">
+            <div class="card-no-image">
+              這筆提供的是商品 / 網頁連結<br>
+              <a class="card-link" href="${escapeHtml(imageUrl)}" target="_blank" rel="noopener noreferrer">
+                查看原始連結
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="card-image-wrap">
+          <div class="card-no-image">目前沒有提供圖片</div>
+        </div>
+      `;
+    }
+
+    function renderCards(rows) {
+      const contentArea = document.getElementById("contentArea");
+
+      if (!rows.length) {
+        contentArea.className = "status";
+        contentArea.innerHTML = `
+          目前這個分類還沒有新的徵求資料。<br>
+          你可以晚點再回來看看，或回徵求站填寫新的需求。
+        `;
+        return;
+      }
+
+      const cardsHtml = rows.map(item => {
+        const imageHtml = renderImageBlock(item["圖片連結"] || "");
+
+        return `
+          <article class="card">
+            ${imageHtml}
+            <h3 class="card-title">${categoryMeta.icon} ${escapeHtml(categoryMeta.name)}</h3>
+            <p class="card-desc">${escapeHtml(item["徵求物品敘述"] || "尚未填寫敘述")}</p>
+
+            <div class="meta">
+              <div class="meta-item">
+                <span class="meta-label">暱稱 / 呼號：</span>
+                ${escapeHtml(item["暱稱 或 呼號"] || "未提供")}
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">聯絡方式：</span>
+                ${escapeHtml(item["手機 或 通訊軟體帳號"] || "未提供")}
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">日期：</span>
+                ${escapeHtml(item["日期"] || "未提供")}
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">時間：</span>
+                ${escapeHtml(item["時間"] || "未提供")}
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">登記時間：</span>
+                ${escapeHtml(item["時間戳記"] || "未提供")}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      contentArea.className = "cards";
+      contentArea.innerHTML = cardsHtml;
+    }
+
+    function getCacheKey() {
+      return `wanted_cache_${category}`;
+    }
+
+    function readCache() {
+      try {
+        const raw = sessionStorage.getItem(getCacheKey());
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.rows) || !parsed.savedAt) return null;
+        if (Date.now() - parsed.savedAt > CACHE_TTL_MS) return null;
+        return parsed.rows;
+      } catch {
+        return null;
+      }
+    }
+
+    function writeCache(rows) {
+      try {
+        sessionStorage.setItem(getCacheKey(), JSON.stringify({
+          savedAt: Date.now(),
+          rows
+        }));
+      } catch {
+      }
+    }
+
+    async function loadData() {
+      const contentArea = document.getElementById("contentArea");
+      const cachedRows = readCache();
+
+      if (cachedRows) {
+        renderCards(cachedRows);
+      }
+
+      try {
+        const url = `${API_URL}?category=${encodeURIComponent(categoryMeta.sheetValue)}`;
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const json = await res.json();
+        const rows = Array.isArray(json.data) ? json.data : [];
+
+        writeCache(rows);
+        renderCards(rows);
+      } catch (error) {
+        console.error(error);
+
+        if (cachedRows) {
+          return;
+        }
+
+        contentArea.className = "status";
+        contentArea.innerHTML = `
+          目前無法讀取徵求資料。<br>
+          請稍後再試，或確認 Apps Script 是否已部署成可公開存取。<br>
+          <small>${escapeHtml(error.message || "未知錯誤")}</small>
+        `;
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
