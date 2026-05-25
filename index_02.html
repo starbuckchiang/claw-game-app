@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>甜心夾娃娃機 Plus</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Microsoft JhengHei","PingFang TC",sans-serif;
+      background:linear-gradient(180deg,#ffe6f2,#fff7fb);
+      color:#5a3d4d;
+    }
+    .wrap{
+      max-width:980px;
+      margin:0 auto;
+      padding:20px 14px 40px;
+    }
+    .card{
+      background:#fff;
+      border:4px solid #f8bfd8;
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 14px 30px rgba(225,131,175,.18);
+    }
+    h1,h2,h3{
+      margin:0 0 10px;
+      color:#d45c92;
+      text-align:center;
+    }
+    p{
+      color:#8b6678;
+      line-height:1.7;
+    }
+    .center{text-align:center}
+    .top-actions,.controls,.board-actions{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    button{
+      border:none;
+      background:#ff8fbc;
+      color:#fff;
+      font-size:16px;
+      padding:12px 18px;
+      border-radius:999px;
+      cursor:pointer;
+      min-width:96px;
+    }
+    .start-btn{background:linear-gradient(90deg,#ff93c2,#ffb36c)}
+    .coin-btn{background:#ffb347}
+    .secondary-btn{background:linear-gradient(90deg,#ffb7cf,#ffc9a6)}
+    .hud{
+      margin-top:18px;
+      background:#fff;
+      border:3px solid #f8bfd8;
+      border-radius:18px;
+      padding:12px;
+      display:flex;
+      gap:12px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      box-shadow:0 8px 20px rgba(255,163,196,.16);
+    }
+    #message{
+      width:100%;
+      text-align:center;
+      font-weight:bold;
+      color:#d45c92;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns:1.6fr 1fr 1fr;
+      gap:16px;
+      margin-top:18px;
+    }
+    .machine,.showcase,.leaderboard{
+      background:#fff;
+      border:4px solid #f8bfd8;
+      border-radius:24px;
+      padding:16px;
+    }
+    .play-area{
+      margin-top:12px;
+      height:320px;
+      border:4px solid #ffd0e3;
+      border-radius:18px;
+      background:linear-gradient(180deg,#fffafc,#ffeef5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:64px;
+    }
+    .showcase-grid{
+      min-height:180px;
+      border:2px dashed #f6c2d9;
+      border-radius:16px;
+      background:#fffafc;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+      padding:12px;
+      justify-items:center;
+      align-items:center;
+    }
+    .toy{
+      width:64px;
+      height:64px;
+      border-radius:16px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:36px;
+      box-shadow:0 6px 14px rgba(225,131,175,.12);
+    }
+    ol{
+      margin:0;
+      padding-left:22px;
+      line-height:1.9;
+      color:#7b5b6b;
+      min-height:140px;
+    }
+    .hidden{display:none}
+    @media (max-width:800px){
+      .layout{grid-template-columns:1fr}
+      .hud{flex-direction:column;align-items:center}
+      .play-area{height:240px;font-size:52px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>甜心夾娃娃機 Plus</h1>
+      <p class="center">
+        獨立入口版本：不用登入，也能玩夾娃娃、累積分數、領每日金幣、存本機排行榜。
+      </p>
+
+      <div class="top-actions">
+        <button id="playBtn" class="start-btn">夾一次（10 金幣）</button>
+        <button id="dailyBtn" class="coin-btn">每日領 50 金幣</button>
+        <button id="saveBtn">儲存成績</button>
+        <button id="resetBtn" class="secondary-btn">清空排行榜</button>
+      </div>
+
+      <div class="hud">
+        <div>🪙 金幣：<span id="coins">100</span></div>
+        <div>⭐ 分數：<span id="score">0</span></div>
+        <div>🎯 可玩次數：<span id="tries">10</span></div>
+        <div id="message">按下「夾一次」試試今天的手氣吧！</div>
+      </div>
+      <div class="layout">
+        <div class="machine">
+          <h3>🎀 娃娃機</h3>
+          <div id="playArea" class="play-area">🎁</div>
+          <div class="controls">
+            <button id="refreshBtn">換一批娃娃</button>
+          </div>
+        </div>
+
+        <div class="showcase">
+          <h3>🎉 我的展示櫃</h3>
+          <div id="showcase" class="showcase-grid"></div>
+        </div>
+
+        <div class="leaderboard">
+          <h3>🏆 本機排行榜</h3>
+          <ol id="leaderboard"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const prizePool = [
+      {name:"小熊",emoji:"🧸",points:20,rarity:"common"},
+      {name:"兔兔",emoji:"🐰",points:20,rarity:"common"},
+      {name:"小貓",emoji:"🐱",points:80,rarity:"rare"},
+      {name:"企鵝",emoji:"🐧",points:80,rarity:"rare"},
+      {name:"皇冠熊",emoji:"👑",points:200,rarity:"legendary"}
+    ];
+
+    let coins = Number(localStorage.getItem("clawCoins")) || 100;
+    let score = Number(localStorage.getItem("clawScore")) || 0;
+
+    const coinsEl = document.getElementById("coins");
+    const scoreEl = document.getElementById("score");
+    const triesEl = document.getElementById("tries");
+    const messageEl = document.getElementById("message");
+    const leaderboardEl = document.getElementById("leaderboard");
+    const showcaseEl = document.getElementById("showcase");
+    const playAreaEl = document.getElementById("playArea");
+
+    function saveState(){
+      localStorage.setItem("clawCoins", coins);
+      localStorage.setItem("clawScore", score);
+    }
+
+    function setMessage(text){
+      messageEl.textContent = text;
+    }
+
+    function updateUI(){
+      coinsEl.textContent = coins;
+      scoreEl.textContent = score;
+      triesEl.textContent = Math.floor(coins / 10);
+    }
+
+    function getBoard(){
+      return JSON.parse(localStorage.getItem("clawLeaderboard") || "[]");
+    }
+
+    function renderBoard(){
+      const board = getBoard();
+      leaderboardEl.innerHTML = board.length
+        ? board.map((x,i)=>`<li>${i+1}. ${x.name}｜${x.score} 分｜${x.date}</li>`).join("")
+        : "<li>還沒有紀錄，快來成為第一名！</li>";
+    }
+
+    function renderShowcase(){
+      const list = JSON.parse(localStorage.getItem("clawShowcase") || "[]");
+      if(!list.length){
+        showcaseEl.innerHTML = '<div style="grid-column:1/-1;color:#b8899e;text-align:center;">還沒夾到娃娃，快試試手氣！</div>';
+        return;
+      }
+      showcaseEl.innerHTML = list.slice(-8).reverse().map(item =>
+        `<div class="toy" title="${item.name} ${item.points}分">${item.emoji}</div>`
+      ).join("");
+    }
+
+    function saveScore(){
+      const name = prompt("輸入暱稱：") || "神秘玩家";
+      const board = getBoard();
+      board.push({
+        name: name.trim() || "神秘玩家",
+        score,
+        date: new Date().toLocaleDateString("zh-TW")
+      });
+      board.sort((a,b)=>b.score-a.score);
+      localStorage.setItem("clawLeaderboard", JSON.stringify(board.slice(0,10)));
+      renderBoard();
+      setMessage("成績已儲存到本機排行榜！");
+    }
+
+    function dailyBonus(){
+      const today = new Date().toDateString();
+      const last = localStorage.getItem("clawLastBonusDate");
+      if(last === today){
+        setMessage("今天的每日補給已經領過囉～");
+        alert("今天已經領過每日金幣了！");
+        return;
+      }
+      coins += 50;
+      localStorage.setItem("clawLastBonusDate", today);
+      saveState();
+      updateUI();
+      setMessage("每日補給 +50 金幣，祝你手氣超好！");
+    }
+
+    function resetBoard(){
+      if(!confirm("確定要清空本機排行榜嗎？")) return;
+      localStorage.removeItem("clawLeaderboard");
+      renderBoard();
+      setMessage("排行榜已清空。");
+    }
+
+    function refreshToyView(){
+      const icons = ["🎁","🧸","🐰","🐱","🐧","🎀","💖","🦄"];
+      playAreaEl.textContent = icons[Math.floor(Math.random() * icons.length)];
+    }
+        function playOnce(){
+      if(coins < 10){
+        setMessage("金幣不足，先領每日補給吧！");
+        alert("金幣不足！請先領每日補給。");
+        return;
+      }
+
+      coins -= 10;
+
+      const success = Math.random() < 0.65;
+      if(success){
+      const prize = prizePool[Math.floor(Math.random() * prizePool.length)];
+        score += prize.points;
+        const list = JSON.parse(localStorage.getItem("clawShowcase") || "[]");
+        list.push(prize);
+        localStorage.setItem("clawShowcase", JSON.stringify(list));
+        renderShowcase();
+
+        if(prize.rarity === "legendary"){
+          setMessage(`傳說級 ${prize.name} 到手！+${prize.points} 分`);
+        }else if(prize.rarity === "rare"){
+          setMessage(`夾到稀有 ${prize.name}！+${prize.points} 分`);
+        }else{
+          setMessage(`夾到 ${prize.name}！+${prize.points} 分`);
+        }
+        playAreaEl.textContent = prize.emoji;
+      }else{
+        setMessage("差一點點！再試一次說不定就中了～");
+        refreshToyView();
+      }
+
+      saveState();
+      updateUI();
+    }
+
+    document.getElementById("playBtn").addEventListener("click", playOnce);
+    document.getElementById("dailyBtn").addEventListener("click", dailyBonus);
+    document.getElementById("saveBtn").addEventListener("click", saveScore);
+    document.getElementById("resetBtn").addEventListener("click", resetBoard);
+    document.getElementById("refreshBtn").addEventListener("click", refreshToyView);
+
+    updateUI();
+    renderBoard();
+    renderShowcase();
+    refreshToyView();
+  </script>
+</body>
+</html>
