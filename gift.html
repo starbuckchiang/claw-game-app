@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>甜心選物｜實體商品兌換</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #eef5ff 0%, #fdfbff 100%);
+      color: #4f4a68;
+    }
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+    .hero, .gift-card {
+      background: #fff;
+      border: 4px solid #d6e4ff;
+      border-radius: 24px;
+      box-shadow: 0 14px 30px rgba(130, 150, 220, 0.15);
+    }
+    .hero {
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      margin: 0 0 10px;
+      color: #6487d9;
+    }
+    p {
+      color: #6d7190;
+      line-height: 1.8;
+    }
+    .top-actions {
+      display: flex;
+            gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .btn {
+      text-decoration: none;
+      border: none;
+      background: linear-gradient(90deg, #8ec5ff, #7ea7ff);
+      color: white;
+      font-size: 16px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .gift-card {
+      padding: 16px;
+    }
+    .gift-image {
+      height: 180px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f7faff 0%, #edf3ff 100%);
+      border: 2px dashed #cbdcff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7b8fc8;
+      font-size: 18px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .gift-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gift-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #6487d9;
+      margin-bottom: 8px;
+    }
+    .gift-cost {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #5b75c8;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .gift-desc {
+      color: #6d7190;
+      line-height: 1.7;
+      min-height: 72px;
+      margin-bottom: 12px;
+    }
+    .gift-note {
+      margin-top: 20px;
+      background: #fff;
+      border: 3px solid #d6e4ff;
+      border-radius: 20px;
+      padding: 16px;
+      color: #6d7190;
+      line-height: 1.8;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .gift-image { height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>🎁 實體商品兌換頁</h1>
+      <p>
+        這頁先給你放實體商品圖片與兌換資訊。<br>
+        之後你可以把每個商品改成真實圖片、兌換條件，或連到 Google 表單 / IG / LINE。
+      </p>
+      <div class="top-actions">
+        <a class="btn" href="./index04.html">回 Index04</a>
+        <a class="btn" href="./index_03.html">回下爪版</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="gift-card">
+        <div class="gift-image">
+          <!-- 可改成 <img src="./images/gift1.jpg" alt="冰刀鞋"> -->
+          商品圖片區 1
+        </div>
+        <div class="gift-name">冰刀鞋</div>
+        <div class="gift-cost">兌換需求：300 點 / 3 張券</div>
+        <div class="gift-desc">
+          可放商品尺寸、品牌、使用狀況、適合對象等資訊。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-image">
+          商品圖片區 2
+        </div>
+        <div class="gift-name">鞋套</div>
+        <div class="gift-cost">兌換需求：120 點 / 1 張券</div>
+        <div class="gift-desc">
+          可放顏色、材質、尺寸、保存狀況，或備註可自取 / 可寄送。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-image">
+          商品圖片區 3
+        </div>
+        <div class="gift-name">旋轉板</div>
+        <div class="gift-cost">兌換需求：180 點 / 2 張券</div>
+        <div class="gift-desc">
+          可放品牌、磨損程度、是否適合初學者，以及兌換說明。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-image">
+          商品圖片區 4
+        </div>
+        <div class="gift-name">可愛娃娃</div>
+        <div class="gift-cost">兌換需求：150 點 / 1 張券</div>
+        <div class="gift-desc">
+          可放尺寸、角色名稱、是否全新、適合送禮或收藏等資訊。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-image">
+          商品圖片區 5
+        </div>
+                <div class="gift-name">冰場服飾</div>
+        <div class="gift-cost">兌換需求：220 點 / 2 張券</div>
+        <div class="gift-desc">
+          可放衣服尺寸、版型、顏色、品牌與保存狀況。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+
+      <div class="gift-card">
+        <div class="gift-image">
+          商品圖片區 6
+        </div>
+        <div class="gift-name">限定小禮包</div>
+        <div class="gift-cost">兌換需求：260 點 / 2 張券</div>
+        <div class="gift-desc">
+          可做成限時活動商品，增加收藏感與回流率。
+        </div>
+        <a class="btn" href="#">我要兌換</a>
+      </div>
+    </div>
+
+    <div class="gift-note">
+      <strong>你之後可以這樣改：</strong><br>
+      1. 把「商品圖片區」換成真實圖片<br>
+      2. 把「我要兌換」按鈕連到 Google Form / LINE / IG / 蝦皮<br>
+      3. 把兌換需求改成你自己的點數或券數規則<br>
+      4. 如果你要，我下一步可以再幫你做「點數 / 兌換券」系統，讓 index04 跟 gift.html 串起來
+    </div>
+  </div>
+</body>
+</html>
+      
