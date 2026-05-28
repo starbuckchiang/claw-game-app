@@ -453,6 +453,54 @@
     font-size: 32px !important;
   }
 }
+    @media screen and (max-width: 900px) {
+  .play-area {
+    height: 180px !important;
+    min-height: 180px !important;
+  }
+
+  .play-area::after {
+    height: 28px !important;
+  }
+
+  .claw-track {
+    height: 56px !important;
+  }
+
+  .claw-arm {
+    width: 64px !important;
+  }
+
+  .claw-head {
+    width: 34px !important;
+    height: 10px !important;
+  }
+
+  .rope {
+    height: 20px !important;
+  }
+
+  .claw {
+    width: 28px !important;
+    height: 22px !important;
+  }
+
+  .finger {
+    width: 8px !important;
+    height: 16px !important;
+    border-width: 3px !important;
+  }
+
+  .controls button {
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+  }
+
+  .hint {
+    font-size: 12px !important;
+    margin-top: 8px !important;
+  }
+}
   </style>
 </head>
 <body>
@@ -731,7 +779,7 @@
       playArea.innerHTML = "";
       prizes = [];
       const cols = [40, 120, 200, 280, 360];
-      const rows = [170, 230, 280];
+      const rows = window.innerWidth<=900?[95, 120, 145]:[170, 230, 280];
 
       for (let i = 0; i < 7; i++) {
         const prize = prizePool[Math.floor(Math.random() * prizePool.length)];
