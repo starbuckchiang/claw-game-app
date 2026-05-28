@@ -251,11 +251,139 @@
     }
 
     @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-      .hud { flex-direction: column; align-items: center; }
-      .play-area { height: 280px; }
-      .prize { width: 46px; height: 46px; font-size: 30px; }
-      .claw-arm { left: 130px; }
+  .wrap {
+    padding: 14px 10px 28px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .machine { order: 1; }
+  .adbox { order: 2; }
+  .showcase { order: 3; }
+  .leaderboard { order: 4; }
+  .promo-card { order: 5; }
+
+  .hud {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .hud > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .machine,
+  .adbox,
+  .showcase,
+  .leaderboard,
+  .promo-card {
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+
+  .play-area {
+    height: 260px;
+  }
+
+  .prize {
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+  }
+
+  .claw-track {
+    height: 70px;
+  }
+
+  .claw-arm {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+  }
+
+  .claw-head {
+    width: 38px;
+    height: 12px;
+  }
+
+  .rope {
+    height: 24px;
+  }
+
+  .claw {
+    width: 34px;
+    height: 26px;
+  }
+
+  .finger {
+    width: 10px;
+    height: 20px;
+    border-width: 3px;
+  }
+
+  .controls,
+  .board-actions,
+  .icon-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .controls button,
+  .board-actions button,
+  .board-actions .icon-link,
+  .icon-links .icon-link {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .showcase-grid {
+    min-height: 140px;
+  }
+
+  .toy {
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+  }
+
+  ol {
+    min-height: auto;
+    padding-left: 20px;
+  }
+
+  .gift-progress,
+  .ad-slot,
+  .promo-text,
+  .hint {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+}
     }
   </style>
 </head>
@@ -718,10 +846,33 @@
       }
     });
 
-    updateUI();
-    renderBoard();
-    renderShowcase();
-    createPrizes();
+    <script>
+  function resetClawPositionForMobile() {
+    if (window.innerWidth <= 900) {
+      const maxX = Math.max(20, playArea.clientWidth - 80);
+      clawX = Math.max(20, Math.min(maxX, (playArea.clientWidth / 2) - 40));
+      clawArm.style.left = clawX + "px";
+      clawArm.style.transform = "none";
+    } else {
+      clawArm.style.transform = "none";
+      clawArm.style.left = clawX + "px";
+    }
+  }
+
+  window.addEventListener("load", () => {
+    resetClawPositionForMobile();
+  });
+
+  window.addEventListener("resize", () => {
+    resetClawPositionForMobile();
+  });
+
+  updateUI();
+  renderBoard();
+  renderShowcase();
+  createPrizes();
+  resetClawPositionForMobile();
+</script>
   </script>
 </body>
 </html>
