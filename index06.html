@@ -385,6 +385,74 @@
   }
 }
     }
+    @media screen and (max-width: 900px) {
+  .layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  .machine { order: 1; }
+  .adbox { order: 2; }
+  .showcase { order: 3; }
+  .leaderboard { order: 4; }
+  .promo-card { order: 5; }
+
+  .machine,
+  .adbox,
+  .showcase,
+  .leaderboard,
+  .promo-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .hud {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .hud > div {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .controls,
+  .board-actions,
+  .icon-links {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .controls button,
+  .board-actions button,
+  .board-actions .icon-link,
+  .icon-links .icon-link {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-area {
+    height: 260px !important;
+  }
+
+  .prize {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 28px !important;
+  }
+
+  .showcase-grid {
+    min-height: 140px !important;
+  }
+
+  .toy {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 32px !important;
+  }
+}
   </style>
 </head>
 <body>
