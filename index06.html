@@ -250,141 +250,6 @@
       line-height: 1.6;
     }
 
-    @media (max-width: 900px) {
-  .wrap {
-    padding: 14px 10px 28px;
-  }
-
-  .card {
-    padding: 14px;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .machine { order: 1; }
-  .adbox { order: 2; }
-  .showcase { order: 3; }
-  .leaderboard { order: 4; }
-  .promo-card { order: 5; }
-
-  .hud {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .hud > div {
-    width: 100%;
-    text-align: center;
-  }
-
-  .machine,
-  .adbox,
-  .showcase,
-  .leaderboard,
-  .promo-card {
-    width: 100%;
-    margin: 0;
-    padding: 14px;
-  }
-
-  .play-area {
-    height: 260px;
-  }
-
-  .prize {
-    width: 44px;
-    height: 44px;
-    font-size: 28px;
-  }
-
-  .claw-track {
-    height: 70px;
-  }
-
-  .claw-arm {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 72px;
-  }
-
-  .claw-head {
-    width: 38px;
-    height: 12px;
-  }
-
-  .rope {
-    height: 24px;
-  }
-
-  .claw {
-    width: 34px;
-    height: 26px;
-  }
-
-  .finger {
-    width: 10px;
-    height: 20px;
-    border-width: 3px;
-  }
-
-  .controls,
-  .board-actions,
-  .icon-links {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .controls button,
-  .board-actions button,
-  .board-actions .icon-link,
-  .icon-links .icon-link {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .showcase-grid {
-    min-height: 140px;
-  }
-
-  .toy {
-    width: 56px;
-    height: 56px;
-    font-size: 32px;
-  }
-
-  ol {
-    min-height: auto;
-    padding-left: 20px;
-  }
-
-  .gift-progress,
-  .ad-slot,
-  .promo-text,
-  .hint {
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  h1 {
-    font-size: 24px;
-    line-height: 1.4;
-  }
-
-  h3 {
-    font-size: 20px;
-  }
-
-  p {
-    font-size: 14px;
-  }
-}
-    }
  
   @media screen and (max-width: 900px) {
   .wrap {
@@ -795,29 +660,36 @@
       setMessage("排行榜已清空。");
     }
 
-    function createPrizes() {
-      playArea.innerHTML = "";
-      prizes = [];
-      const cols = window.innerWidth <= 900 ? [20, 70, 120, 170, 220] : [40, 120, 200, 280, 360];
-      const rows = window.innerWidth <= 900 ? [95, 120, 145]:[170, 230, 280];
+    
+function createPrizes() {
+  playArea.innerHTML = "";
+  prizes = [];
 
-      for (let i = 0; i < 7; i++) {
-        const prize = prizePool[Math.floor(Math.random() * prizePool.length)];
-        const el = document.createElement("div");
-        el.className = "prize";
-        el.textContent = prize.emoji;
+  const isMobile = window.innerWidth <= 900;
+  const cols = isMobile
+    ? [20, 65, 110, 155, 200]
+    : [40, 120, 200, 280, 360];
 
-        const x = cols[Math.floor(Math.random() * cols.length)] + Math.floor(Math.random() * 12);
-        const y = rows[Math.floor(Math.random() * rows.length)] + Math.floor(Math.random() * 10);
+  const rows = isMobile
+    ? [55, 85, 115]
+    : [170, 230, 280];
 
-        el.style.left = x + "px";
-        el.style.top = y + "px";
+  for (let i = 0; i < 7; i++) {
+    const prize = prizePool[Math.floor(Math.random() * prizePool.length)];
+    const el = document.createElement("div");
+    el.className = "prize";
+    el.textContent = prize.emoji;
 
-        playArea.appendChild(el);
-        prizes.push({ ...prize, x, y, el });
-      }
-    }
+    const x = cols[Math.floor(Math.random() * cols.length)];
+    const y = rows[Math.floor(Math.random() * rows.length)];
 
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+
+    playArea.appendChild(el);
+    prizes.push({ ...prize, x, y, el });
+  }
+}
     function moveClaw(delta) {
       if (isDropping) return;
       clawX += delta;
