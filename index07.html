@@ -471,6 +471,109 @@
         line-height: 1.6;
       }
     }
+    .ad-video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 20, 28, 0.72);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.ad-video-modal.show {
+  display: flex;
+}
+
+.ad-video-panel {
+  width: min(92vw, 520px);
+  background: #fff;
+  border: 4px solid #f8bfd8;
+  border-radius: 24px;
+  box-shadow: 0 18px 42px rgba(80, 45, 62, 0.28);
+  overflow: hidden;
+}
+
+.ad-video-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(90deg, #ffe6f2, #fff3f8);
+  border-bottom: 2px solid #f6d5e4;
+}
+
+.ad-video-title {
+  font-weight: bold;
+  color: #d45c92;
+  font-size: 16px;
+}
+
+.ad-video-close {
+  border: none;
+  background: #ff8fbc;
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: none;
+  min-width: 0;
+  padding: 0;
+}
+
+.ad-video-body {
+  padding: 16px;
+}
+
+.ad-video-player {
+  width: 100%;
+  border-radius: 18px;
+  background: #000;
+  display: block;
+}
+
+.ad-video-note {
+  margin-top: 12px;
+  text-align: center;
+  color: #8b6678;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.ad-video-status {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #d45c92;
+}
+
+@media (max-width: 900px) {
+  .ad-video-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ad-video-header {
+    padding: 12px 14px;
+  }
+
+  .ad-video-title {
+    font-size: 15px;
+  }
+
+  .ad-video-body {
+    padding: 12px;
+  }
+
+  .ad-video-note,
+  .ad-video-status {
+    font-size: 13px;
+  }
+}
   </style>
 </head>
 <body>
@@ -975,5 +1078,37 @@ return true;
     createPrizes();
     resetClawPosition();
   </script>
+      
+  <div id="adVideoModal" class="ad-video-modal">
+  <div class="ad-video-panel">
+    <div class="ad-video-header">
+      <div class="ad-video-title">✨ 甜心補給站影片</div>
+      <button id="adVideoCloseBtn" class="ad-video-close" type="button">×</button>
+    </div>
+
+    <div class="ad-video-body">
+      <video
+        id="adVideoPlayer"
+        class="ad-video-player"
+        playsinline
+        webkit-playsinline
+        preload="auto"
+        controls
+      >
+        <source src="./video/ad.mp4" type="video/mp4">
+        你的瀏覽器不支援影片播放。
+      </video>
+
+      <div class="ad-video-note">
+        影片完整播放後，關閉視窗即可領取補給：<br>
+        <strong>+100 金幣 / +1 次免費機會</strong>
+      </div>
+
+      <div id="adVideoStatus" class="ad-video-status">
+        影片尚未播放完成
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
