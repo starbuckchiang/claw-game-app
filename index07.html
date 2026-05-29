@@ -580,13 +580,8 @@
   <div class="wrap">
     <div class="card">
       <h1>甜心夾娃娃機 Plus </h1>
-      <p>
-        這版加入甜心補給站、每日 3 次獎勵廣告、金幣不足 / 連敗提醒，
-        也保留點數、兌換券、展示櫃與 gift.html 導流。
-      </p>
 
       <div class="icon-links">
-        <a class="icon-link secondary-btn" href="./index05.html">🎀 Index05</a>
         <a class="icon-link gift-btn" href="./gift.html">🎁 去兌換實體商品</a>
       </div>
 
@@ -694,6 +689,14 @@
       { name: "Bonus 星星禮物", emoji: "🌟", score: 120, points: 120, rarity: "bonus" },
       { name: "Bonus 花花禮物", emoji: "🌸", score: 120, points: 120, rarity: "bonus" }
     ];
+
+    const adVideoModal = document.getElementById("adVideoModal");
+    const adVideoPlayer = document.getElementById("adVideoPlayer");
+    const adVideoCloseBtn = document.getElementById("adVideoCloseBtn");
+    const adVideoStatus = document.getElementById("adVideoStatus");
+
+    let adVideoCompleted = false;
+    let adRewardPending = false;
 
     let coins = Number(localStorage.getItem("clawCoins06")) || 100;
     let score = Number(localStorage.getItem("clawScore06")) || 0;
@@ -832,21 +835,62 @@
       setMessage("每日登入成功，+50 金幣！");
     }
 
-    function rewardAd() {
-      if (adWatched >= 3) {
-        alert("今天的補給次數已經用完了，明天再來喔！");
-        setMessage("今天的甜心補給已經領完囉，明天再來補給吧！");
-        return;
-      }
+    
+  function rewardAd() {
+  if (adWatched >= 3) {
+    alert("今天的補給次數已經用完了，明天再來喔！");
+    setMessage("今天的甜心補給已經領完囉，明天再來補給吧！");
+    return;
+  }
 
-      alert("獎勵影片播放完成（示意版）！");
-      adWatched += 1;
-      coins += 100;
-      bonusPlays += 1;
-      saveState();
-      updateUI();
-      setMessage("補給完成！+100 金幣、+1 次免費機會");
-    }
+  adVideoCompleted = false;
+  adRewardPending = false;
+
+  adVideoStatus.textContent = "影片尚未播放完成";
+  adVideoModal.classList.add("show");
+
+  adVideoPlayer.currentTime = 0;
+  adVideoPlayer.play().catch(() => {
+    setMessage("影片已開啟，如果沒有自動播放，請手動按播放。");
+  });
+}
+  adVideoPlayer.addEventListener("ended", ...);
+  adVideoCloseBtn.addEventListener("click", closeAdModal);
+  document.getElementById("watchAdBtn").addEventListener("click", rewardAd);
+    
+    function grantAdReward() {
+  if (adRewardPending) return;
+
+  adRewardPending = true;
+  adWatched += 1;
+  coins += 100;
+  bonusPlays += 1;
+  saveState();
+  updateUI();
+  setMessage("補給完成！+100 金幣、+1 次免費機會");
+}
+    
+function closeAdModal() {
+  adVideoPlayer.pause();
+  adVideoModal.classList.remove("show");
+
+  if (adVideoCompleted) {
+    grantAdReward();
+    adVideoCompleted = false;
+    adVideoStatus.textContent = "補給已送達，記得去試試手氣！";
+  } 
+  
+  else {
+    adVideoStatus.textContent = "影片尚未播放完成";
+    setMessage("影片還沒播完，這次還不能領補給喔。");
+  }
+
+    adVideoPlayer.addEventListener("ended", () => {
+    adVideoCompleted = true;
+    adVideoStatus.textContent = "影片播放完成，按右上角 × 關閉即可領取補給";
+  });
+    
+  adVideoCloseBtn.addEventListener("click", closeAdModal);
 
     function resetBoard() {
       if (!confirm("確定要清空本機排行榜嗎？")) return;
@@ -1050,7 +1094,7 @@ return true;
     document.getElementById("dropBtn").addEventListener("click", dropClaw);
     document.getElementById("dailyBtn").addEventListener("click", dailyBonus);
     document.getElementById("saveBtn").addEventListener("click", saveScore);
-  document.getElementById("resetBtn").addEventListener("click", resetBoard);
+    document.getElementById("resetBtn").addEventListener("click", resetBoard);
     document.getElementById("watchAdBtn").addEventListener("click", rewardAd);
 
     window.addEventListener("keydown", (e) => {
