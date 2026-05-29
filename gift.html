@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>甜心選物｜實體商品兌換</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #eef5ff 0%, #fdfbff 100%);
+      color: #4f4a68;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .hero,
+    .wallet,
+    .gift-card,
+    .tips-card,
+    .history-card {
+      background: #fff;
+      border: 4px solid #d6e4ff;
+      border-radius: 24px;
+      box-shadow: 0 14px 30px rgba(130, 150, 220, 0.15);
+    }
+
+    .hero,
+    .wallet,
+    .tips-card,
+    .history-card {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 10px;
+      color: #6487d9;
+    }
+
+    p {
+      color: #6d7190;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      text-decoration: none;
+      border: none;
+      background: linear-gradient(90deg, #8ec5ff, #7ea7ff);
+      color: white;
+      font-size: 16px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(126, 167, 255, 0.2);
+    }
+
+    .btn.secondary {
+      background: linear-gradient(90deg, #c9d8ff, #aebfff);
+      color: #3f548f;
+    }
+
+    .wallet-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .wallet-stat {
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      color: #5b75c8;
+      border-radius: 18px;
+      padding: 16px;
+      font-weight: bold;
+      text-align: center;
+      border: 2px solid #dce8ff;
+    }
+
+    .wallet-label {
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #6c7fb8;
+    }
+
+    .wallet-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #4f68b7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .gift-card {
+      padding: 16px;
+    }
+
+    .gift-image {
+      height: 180px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f7faff 0%, #edf3ff 100%);
+      border: 2px dashed #cbdcff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7b8fc8;
+      font-size: 18px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .gift-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gift-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #6487d9;
+      margin-bottom: 8px;
+    }
+
+    .gift-cost {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #5b75c8;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .gift-desc {
+      color: #6d7190;
+      line-height: 1.7;
+      min-height: 72px;
+      margin-bottom: 12px;
+    }
+
+    .gift-status {
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+      background: #f7faff;
+      border: 1px solid #dbe7ff;
+      color: #5f6f9d;
+    }
+
+    .gift-status.ok {      
+      background: #eefbf2;
+      border-color: #cdeed7;
+      color: #3c8b58;
+      font-weight: bold;
+    }
+
+    .tips-card p,
+    .history-card p {
+color: #6d7190;
+      line-height: 1.8;
+    }
+
+    .tips-list {
+      margin-top: 10px;
+      padding-left: 20px;
+      color: #6d7190;
+      line-height: 1.8;
+    }
+
+    .history-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-item {
+      background: linear-gradient(180deg, #f8fbff 0%, #eff5ff 100%);
+      border: 2px solid #dce8ff;
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: #5f6f9d;
+      line-height: 1.7;
+    }
+
+    .history-empty {
+      margin-top: 12px;
+      color: #8a93b0;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+      .wrap {
+        padding: 16px 12px 28px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wallet-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .gift-image {
+        height: 220px;
+      }
+
+      .top-actions {
+        flex-direction: column;
+      }
+
+      .top-actions .btn {
+        width: 100%;
+      }
+
+      .wallet-value {
+        font-size: 24px;
+      }
+
+      .gift-name {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>🎁 實體商品兌換頁</h1>
+      <p>
+        這裡可以用你在娃娃機累積的 <strong>點數</strong> 與 <strong>兌換券</strong> 兌換商品。<br>
+        如果還差一點點，就回去夾幾次再來看看吧。
+      </p>
+      <div class="top-actions">
+        <a class="btn" href="./index07.html">回 Index07</a>
+        <a class="btn secondary" href="./index05.html">回 Index05</a>
+      </div>
+    </div>
+
+    <div class="wallet">
+      <h2>💼 我的兌換資產</h2>
+      <div class="wallet-stats">
+        <div class="wallet-stat">
+          <div class="wallet-label">💎 目前點數</div>
+          <div class="wallet-value" id="points">0</div>
+        </div>
+        <div class="wallet-stat">
+          <div class="wallet-label">🎟 目前兌換券</div>
+          <div class="wallet-value" id="tickets">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" id="giftGrid"></div>
+
+    <div class="tips-card">
+      <h3>✨ 甜心小提醒</h3>
+      <p>如果你現在還差一點資源，可以先回娃娃機補一下：</p>
+      <ul class="tips-list">
+        <li>每日登入可領 +50 金幣</li>
+        <li>甜心補給站每天最多可領 3 次獎勵</li>
+        <li>每成功夾到 5 次會送 1 張兌換券</li>
+        <li>每成功夾到 10 次還會送 1 個 Bonus 禮物</li>
+      </ul>
+      <div class="top-actions">
+        <a class="btn" href="./index07.html">回去夾娃娃補資源</a>
+      </div>
+    </div>
+
+    <div class="history-card">
+      <h3>🧾 已兌換紀錄</h3>
+      <p>這裡會顯示你已經成功兌換過的商品。</p>
+      <div id="historyList" class="history-list"></div>
+      <div id="historyEmpty" class="history-empty" style="display:none;">目前還沒有兌換紀錄。</div>
+    </div>
+  </div>
+
+  <script>
+    const gifts = [
+      {
+        id: "gift1",
+        name: "冰刀鞋",
+        points: 300,
+        tickets: 3,
+        desc: "可放品牌、尺寸、保存狀況、適合對象等資訊。",
+        image: "./image.png"
+      },
+      {
+        id: "gift2",
+        name: "鞋套",
+        points: 120,
+        tickets: 1,
+        desc: "可放顏色、材質、尺寸與保存狀況。",
+        image: "./image.png"
+      },
+      {
+        id: "gift3",
+        name: "旋轉板",
+        points: 180,
+        tickets: 2,
+        desc: "可放品牌、磨損程度與適合初學者等資訊。",
+        image: "./image.png"
+      },
+      {
+        id: "gift4",
+        name: "可愛娃娃",
+        points: 150,
+        tickets: 1,
+        desc: "可放尺寸、角色名稱與是否全新等資訊。",
+        image: "./image.png"
+      },
+      {
+        id: "gift5",
+        name: "冰場服飾",
+        points: 220,
+        tickets: 2,
+        desc: "可放尺寸、版型、顏色與品牌資訊。",
+        image: "./image.png"
+      },
+      {
+        id: "gift6",
+        name: "限定小禮包",
+        points: 260,
+        tickets: 2,
+        desc: "可做成限時活動商品，增加收藏與回流感。",
+        image: "./image.png"
+      }
+    ];
+
+    let points = Number(localStorage.getItem("clawPoints06")) || Number(localStorage.getItem("clawPoints05")) || 0;
+    let tickets = Number(localStorage.getItem("clawTickets06")) || Number(localStorage.getItem("clawTickets05")) || 0;
+
+    const pointsEl = document.getElementById("points");
+const ticketsEl = document.getElementById("tickets");
+    const giftGrid = document.getElementById("giftGrid");
+    const historyList = document.getElementById("historyList");
+    const historyEmpty = document.getElementById("historyEmpty");
+
+    function saveWallet() {
+      localStorage.setItem("clawPoints06", points);
+      localStorage.setItem("clawTickets06", tickets);
+    }
+
+    function updateWallet() {
+      pointsEl.textContent = points;
+      ticketsEl.textContent = tickets;
+    }
+
+    function getStatusText(gift) {
+      const pointGap = Math.max(0, gift.points - points);
+      const ticketGap = Math.max(0, gift.tickets - tickets);
+
+      if (pointGap === 0 && ticketGap === 0) {
+        return {
+          text: "✅ 可立即兌換，資源已足夠",
+          className: "gift-status ok"
+        };
+      }
+
+      if (pointGap > 0 && ticketGap > 0) {
+        return {
+          text: `還差 ${pointGap} 點、${ticketGap} 張券`,
+          className: "gift-status"
+        };
+      }
+
+      if (pointGap > 0) {
+        return {
+          text: `還差 ${pointGap} 點即可兌換`,
+          className: "gift-status"
+        };
+      }
+
+      return {
+        text: `還差 ${ticketGap} 張券即可兌換`,
+        className: "gift-status"
+      };
+    }
+
+    function redeemGift(id) {
+      const gift = gifts.find(x => x.id === id);
+      if (!gift) return;
+
+      if (points < gift.points || tickets < gift.tickets) {
+        alert(`兌換條件不足：需要 ${gift.points} 點 / ${gift.tickets} 張券`);
+        return;
+      }
+
+      const ok = confirm(`確定要兌換「${gift.name}」嗎？會扣除 ${gift.points} 點 / ${gift.tickets} 張券`);
+      if (!ok) return;
+
+      points -= gift.points;
+      tickets -= gift.tickets;
+      saveWallet();
+      updateWallet();
+
+      const redeemed = JSON.parse(localStorage.getItem("clawRedeemedGifts06") || "[]");
+      redeemed.push({
+        name: gift.name,
+        date: new Date().toLocaleDateString("zh-TW"),
+        points: gift.points,
+        tickets: gift.tickets
+      });
+      localStorage.setItem("clawRedeemedGifts06", JSON.stringify(redeemed));
+
+      alert(`兌換成功：${gift.name}`);
+      renderGifts();
+      renderHistory();
+    }
+
+    function renderGifts() {
+      giftGrid.innerHTML = gifts.map(gift => {
+        const status = getStatusText(gift);
+        const enough = points >= gift.points && tickets >= gift.tickets;
+
+        return `
+          <div class="gift-card">
+            <div class="gift-image">
+              <img src="${gift.image || './image.png'}" alt="${gift.name}" onerror="this.src='./image.png'">
+            </div>
+            <div class="gift-name">${gift.name}</div>
+            <div class="gift-cost">兌換需求：${gift.points} 點 / ${gift.tickets} 張券</div>
+            <div class="gift-desc">${gift.desc}</div>
+            <div class="${status.className}">${status.text}</div>
+            <button class="btn" onclick="redeemGift('${gift.id}')" ${enough ? "" : "style='opacity:.65'"}>${enough ? "我要兌換" : "資源不足"}</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderHistory() {
+      const redeemed = JSON.parse(localStorage.getItem("clawRedeemedGifts06") || "[]");
+
+      if (!redeemed.length) {
+        historyList.innerHTML = "";
+        historyEmpty.style.display = "block";
+        return;
+      }
+
+      historyEmpty.style.display = "none";
+      historyList.innerHTML = redeemed.slice().reverse().map(item => {
+        return `
+          <div class="history-item">
+            <strong>${item.name}</strong><br>
+            兌換日期：${item.date}<br>
+            扣除：${item.points} 點 / ${item.tickets} 張券
+          </div>
+        `;
+      }).join("");
+    }
+
+    updateWallet();
+    renderGifts();
+    renderHistory();
+    window.redeemGift = redeemGift;
+  </script>
+</body>
+</html>
