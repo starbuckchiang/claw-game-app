@@ -27,7 +27,7 @@ function setupWantedForm() {
   if (!form || !submitBtn || !statusEl) return;
 
   const FORM_URL =
-    "https://docs.google.com/forms/d/e/1FAIpQLScKLkUyuTR-5kYBmE6f52bGD7I3jivZ5ah8HSFgaGxA6Q7U4w/formResponse";
+    "https://docs.google.com/spreadsheets/d/1I6QqVPGMzMrGrcgcIgrJvnWM6WjmIzJY4OXSW8l57ew/edit?resourcekey=&gid=1467492265#gid=1467492265/Form_Responses";
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
