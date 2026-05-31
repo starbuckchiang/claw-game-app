@@ -43,6 +43,8 @@ function setupWantedForm() {
     const note = (formData.get("note") || "").toString().trim();
     const contact = (formData.get("contact") || "").toString().trim();
     const nickname = (formData.get("nickname") || "").toString().trim();
+    const date = (formData.get("date") || "").toString().trim();
+    const time = (formData.get("time") || "").toString().trim();
 
     if (!category && !itemName && !note) {
       statusEl.textContent = "請至少填寫商品分類、商品名稱，或其他備註其中一項。";
@@ -66,6 +68,19 @@ function setupWantedForm() {
     payload.append("entry.936283346", "");
     payload.append("entry.24028156", nickname);
     payload.append("entry.244490545", contact);
+
+    if (date) {
+      const [year, month, day] = date.split("-");
+      payload.append("entry.1533264183_year", year || "");
+      payload.append("entry.1533264183_month", month || "");
+      payload.append("entry.1533264183_day", day || "");
+    }
+
+    if (time) {
+      const [hour, minute] = time.split(":");
+      payload.append("entry.1943315019_hour", hour || "");
+      payload.append("entry.1943315019_minute", minute || "");
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "送出中…";
