@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>甜心許願池｜甜心選物 × 冰場好物小舖</title>
+  <title>冰場好物徵求站｜甜心選物 × 冰場好物小舖</title>
 
   <link rel="stylesheet" href="./css/base.css" />
   <link rel="stylesheet" href="./css/layout.css" />
@@ -23,7 +23,7 @@
             <span class="badge">Direct Submit</span>
           </div>
 
-          <h1 class="wanted-title">甜心許願池</h1>
+          <h1 class="wanted-title">冰場好物徵求站</h1>
 
           <p class="wanted-desc">
             如果你正在找冰刀鞋、鞋套、旋轉板、服飾、娃娃或裝備，<br />
@@ -130,18 +130,18 @@
           </div>
 
           <div class="soft-card">
-            <label for="wanted-image"><strong>圖片連結(可不填)</strong></label>
+            <label for="wanted-image"><strong>圖片連結（可不填）</strong></label>
             <input
               id="wanted-image"
               type="text"
               name="entry.936283346"
               class="form-control"
-              placeholder="請貼可直接顯示的圖片網址（jpg / png / webp）"
+              placeholder="可選填：如果有參考圖片再貼上圖片網址"
             />
             <div class="form-note">
               🔗 不知道怎麼放圖？點這裡看教學 ☞
               <a href="./qa.html" target="_blank" rel="noopener noreferrer">常見問題</a><br />
-              若貼 Yahoo、蝦皮等商品頁，分類頁會顯示為「查看原始連結」。
+              沒有圖片也可以直接送出；若貼 Yahoo、蝦皮等商品頁，分類頁會顯示為「查看原始連結」。
             </div>
           </div>
 
@@ -174,20 +174,29 @@
           <div class="grid-2">
             <div class="soft-card">
               <label for="wanted-date"><strong>日期</strong></label>
-              <input id="wanted-date" type="date" class="form-control" required />
+              <input
+                id="wanted-date"
+                type="date"
+                class="form-control"
+                required
+              />
+              <input type="hidden" name="entry.1533264183_year" id="gf-date-year" />
+              <input type="hidden" name="entry.1533264183_month" id="gf-date-month" />
+              <input type="hidden" name="entry.1533264183_day" id="gf-date-day" />
             </div>
 
             <div class="soft-card">
               <label for="wanted-time"><strong>時間</strong></label>
-              <input id="wanted-time" type="time" class="form-control" required />
+              <input
+                id="wanted-time"
+                type="time"
+                class="form-control"
+                required
+              />
+              <input type="hidden" name="entry.1943315019_hour" id="gf-time-hour" />
+              <input type="hidden" name="entry.1943315019_minute" id="gf-time-minute" />
             </div>
           </div>
-
-          <input type="hidden" name="entry.1533264183_year" id="gf-date-year" />
-          <input type="hidden" name="entry.1533264183_month" id="gf-date-month" />
-          <input type="hidden" name="entry.1533264183_day" id="gf-date-day" />
-          <input type="hidden" name="entry.1943315019_hour" id="gf-time-hour" />
-          <input type="hidden" name="entry.1943315019_minute" id="gf-time-minute" />
 
           <div class="button-row wanted-form-actions">
             <button type="submit" class="btn btn-start" id="submitWantedBtn">送出徵求</button>
@@ -196,7 +205,7 @@
           </div>
 
           <div id="wantedFormStatus" class="notice-box wanted-form-note">
-            填好後按「送出徵求」，會開新分頁送到 Google Form。
+            填好後按「送出徵求」，資料會開新分頁送到 Google Form。
           </div>
         </form>
       </div>
