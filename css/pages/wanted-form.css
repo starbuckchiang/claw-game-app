@@ -234,3 +234,68 @@
     font-size: 14px;
   }
 }
+/* wanted form controls */
+.form-control {
+  width: 100%;
+  display: block;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 2px solid #f0c7d8;
+  border-radius: 14px;
+  background: #fff;
+  color: #5f4b57;
+  font-size: 15px;
+  line-height: 1.5;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #e28ab1;
+  box-shadow: 0 0 0 4px rgba(226, 138, 177, 0.16);
+  background: #fffdff;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input.form-control[type="date"],
+input.form-control[type="time"] {
+  min-height: 48px;
+}
+
+.soft-card {
+  position: relative;
+  z-index: 1;
+}
+
+.panel,
+.section,
+.page-wrap,
+.stack,
+.grid-2 {
+  position: relative;
+}
+
+.wanted-form-actions {
+  margin-top: 20px;
+}
+
+#wantedFormStatus {
+  margin-top: 16px;
+}
+
+@media (max-width: 767px) {
+  .form-control {
+    font-size: 16px; /* 避免 iPhone 自動縮放 */
+  }
+}
