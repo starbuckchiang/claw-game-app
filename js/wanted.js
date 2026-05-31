@@ -53,6 +53,12 @@ function setupWantedForm() {
   const dateInput = document.getElementById("wanted-date");
   const timeInput = document.getElementById("wanted-time");
 
+  const gfDateYear = document.getElementById("gf-date-year");
+  const gfDateMonth = document.getElementById("gf-date-month");
+  const gfDateDay = document.getElementById("gf-date-day");
+  const gfTimeHour = document.getElementById("gf-time-hour");
+  const gfTimeMinute = document.getElementById("gf-time-minute");
+
   if (
     !form ||
     !statusEl ||
@@ -62,7 +68,12 @@ function setupWantedForm() {
     !nicknameInput ||
     !contactInput ||
     !dateInput ||
-    !timeInput
+    !timeInput ||
+    !gfDateYear ||
+    !gfDateMonth ||
+    !gfDateDay ||
+    !gfTimeHour ||
+    !gfTimeMinute
   ) {
     return;
   }
@@ -71,45 +82,62 @@ function setupWantedForm() {
     statusEl.textContent = message;
   }
 
-  function validateForm() {
-    const category = (categoryInput.value || "").trim();
-    const desc = (descInput.value || "").trim();
-    const nickname = (nicknameInput.value || "").trim();
-    const contact = (contactInput.value || "").trim();
-    const date = (dateInput.value || "").trim();
-    const time = (timeInput.value || "").trim();
+  function syncDateTimeToGoogleForm() {
+    const dateValue = dateInput.value;
+    const timeValue = timeInput.value;
 
-    if (!category) {
+    gfDateYear.value = "";
+    gfDateMonth.value = "";
+    gfDateDay.value = "";
+    gfTimeHour.value = "";
+    gfTimeMinute.value = "";
+
+    if (dateValue) {
+      const parts = dateValue.split("-");
+      gfDateYear.value = parts[0] || "";
+      gfDateMonth.value = parts[1] || "";
+      gfDateDay.value = parts[2] || "";
+    }
+
+    if (timeValue) {
+      const parts = timeValue.split(":");
+      gfTimeHour.value = parts[0] || "";
+      gfTimeMinute.value = parts[1] || "";
+    }
+  }
+
+  function validateForm() {
+    if (!(categoryInput.value || "").trim()) {
       setStatus("請先選擇物品分類。");
       categoryInput.focus();
       return false;
     }
 
-    if (!desc) {
+    if (!(descInput.value || "").trim()) {
       setStatus("請填寫徵求物品敘述。");
       descInput.focus();
       return false;
     }
 
-    if (!nickname) {
+    if (!(nicknameInput.value || "").trim()) {
       setStatus("請填寫暱稱或呼號。");
       nicknameInput.focus();
       return false;
     }
 
-    if (!contact) {
+    if (!(contactInput.value || "").trim()) {
       setStatus("請填寫聯絡方式。");
       contactInput.focus();
       return false;
     }
 
-    if (!date) {
+    if (!(dateInput.value || "").trim()) {
       setStatus("請選擇日期。");
       dateInput.focus();
       return false;
     }
 
-    if (!time) {
+    if (!(timeInput.value || "").trim()) {
       setStatus("請選擇時間。");
       timeInput.focus();
       return false;
@@ -118,29 +146,25 @@ function setupWantedForm() {
     return true;
   }
 
+  dateInput.addEventListener("change", syncDateTimeToGoogleForm);
+  timeInput.addEventListener("change", syncDateTimeToGoogleForm);
+  dateInput.addEventListener("input", syncDateTimeToGoogleForm);
+  timeInput.addEventListener("input", syncDateTimeToGoogleForm);
+
   form.addEventListener("submit", (event) => {
     if (!validateForm()) {
       event.preventDefault();
       return;
     }
 
-    const date = dateInput.value.trim();
-    const time = timeInput.value.trim();
-    const originalDesc = descInput.value.trim();
+    syncDateTimeToGoogleForm();
 
-    const dateTimeText = `\n希望時間：${date} ${time}`;
-    if (!originalDesc.includes("希望時間：")) {
-      descInput.value = `${originalDesc}${dateTimeText}`;
-    }
+    setTimeout(() => {
+      syncDateTimeToGoogleForm();
+    }, 0);
 
     submitBtn.disabled = true;
     submitBtn.textContent = "送出中…";
-    setStatus("即將開啟 Google Form 送出頁面，請稍候…");
-
-    setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "送出徵求";
-      setStatus("如果已成功開啟新分頁，請在 Google Form 頁面完成送出。");
-    }, 1500);
+    setStatus("正在整理日期時間並送出 Google Form，請稍候…");
   });
 }
