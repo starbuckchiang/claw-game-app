@@ -1,0 +1,243 @@
+.wanted-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 56px 28px;
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(255,247,251,0.98) 52%, rgba(248,244,255,0.98) 100%);
+  box-shadow:
+    0 24px 60px rgba(145, 109, 129, 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.92);
+}
+
+.wanted-hero::before,
+.wanted-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.wanted-hero::before {
+  width: 280px;
+  height: 280px;
+  top: -110px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(234, 207, 223, 0.48) 0%, rgba(234, 207, 223, 0) 72%);
+}
+
+.wanted-hero::after {
+  width: 240px;
+  height: 240px;
+  left: -90px;
+  bottom: -90px;
+  background: radial-gradient(circle, rgba(218, 226, 248, 0.46) 0%, rgba(218, 226, 248, 0) 72%);
+}
+
+.wanted-kicker {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(215, 194, 207, 0.58);
+  color: #9f7289;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.wanted-badges {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.wanted-title {
+  margin: 0 0 16px;
+  color: #5d4552;
+  font-size: 48px;
+  line-height: 1.16;
+  text-align: center;
+}
+
+.wanted-desc {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  color: #7b6772;
+  font-size: 16px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.wanted-actions .btn {
+  min-width: 180px;
+}
+
+.wanted-subnote {
+  margin-top: 14px;
+  text-align: center;
+  color: #977a88;
+  font-size: 13px;
+}
+
+.wanted-section-title {
+  position: relative;
+}
+
+.wanted-section-title::after {
+  content: "";
+  display: block;
+  width: 82px;
+  height: 4px;
+  border-radius: 999px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, #d8b7c6, #e7cfaf);
+}
+
+.wanted-grid {
+  align-items: stretch;
+}
+
+.wanted-card {
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,249,252,0.98) 100%);
+  border: 1px solid rgba(229, 214, 222, 0.84);
+  border-radius: 26px;
+  padding: 22px;
+  box-shadow: 0 18px 36px rgba(149, 122, 137, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wanted-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 42px rgba(149, 122, 137, 0.12);
+}
+
+.wanted-card-icon {
+  margin-bottom: 12px;
+  font-size: 30px;
+}
+
+.wanted-card-title {
+  margin: 0 0 10px;
+  color: #624955;
+  font-size: 20px;
+}
+
+.wanted-card-text {
+  margin: 0 0 12px;
+  color: #7d6773;
+  line-height: 1.8;
+}
+
+.wanted-card-meta {
+  color: #b06f8d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.wanted-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wanted-step {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,249,252,0.98) 100%);
+  border: 1px solid rgba(229, 214, 222, 0.84);
+  border-radius: 20px;
+  padding: 16px 18px;
+}
+
+.wanted-step-no {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #b0708e;
+  font-size: 12px;
+  font-weight: 700;
+letter-spacing: 0.08em;
+}
+
+.wanted-step-title {
+  margin: 0 0 8px;
+  color: #624955;
+  font-size: 18px;
+}
+
+.wanted-step-text {
+  margin: 0;
+  color: #7d6773;
+  line-height: 1.8;
+}
+
+.wanted-note-box {
+  margin-top: 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,254,254,0.98) 0%, rgba(255,248,251,0.98) 100%);
+  border: 1px dashed rgba(218, 196, 207, 0.95);
+  color: #7d6974;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.page-ready .wanted-hero,
+.page-ready .wanted-card,
+.page-ready .wanted-step,
+.page-ready .panel {
+  animation: wantedFadeRise 0.72s ease both;
+}
+
+.page-ready .wanted-card:nth-child(2),
+.page-ready .wanted-step:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.page-ready .wanted-card:nth-child(3),
+.page-ready .wanted-step:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+@keyframes wantedFadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.is-clicked {
+  transform: scale(0.985);
+}
+
+@media (max-width: 900px) {
+  .wanted-hero {
+    padding: 34px 18px;
+    border-radius: 24px;
+  }
+
+  .wanted-title {
+    font-size: 34px;
+    line-height: 1.24;
+  }
+
+  .wanted-desc {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .wanted-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .wanted-note-box {
+    font-size: 14px;
+  }
+}
