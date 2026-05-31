@@ -1,0 +1,256 @@
+/* =========================
+   Gift Page / gift.html 專用頁面樣式
+   ========================= */
+
+body {
+  background: linear-gradient(180deg, #eef5ff 0%, #fdfbff 100%);
+  color: #4f4a68;
+}
+
+/* =========================
+   Gift Page Main Blocks / 主區塊外觀
+   ========================= */
+
+.hero,
+.wallet,
+.gift-card,
+.tips-card,
+.history-card {
+  background: #fff;
+  border: 4px solid #d6e4ff;
+  border-radius: 24px;
+  box-shadow: 0 14px 30px rgba(130, 150, 220, 0.15);
+}
+
+.hero,
+.wallet,
+.tips-card,
+.history-card {
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.hero {
+  text-align: center;
+}
+
+.hero h1,
+.wallet h2,
+.tips-card h3,
+.history-card h3 {
+  color: #6487d9;
+}
+
+.hero p,
+.wallet p,
+.tips-card p,
+.history-card p {
+  color: #6d7190;
+  line-height: 1.8;
+}
+
+/* =========================
+   Top Actions / 頂部按鈕
+   ========================= */
+
+.top-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* =========================
+   Wallet / 點數與兌換券資產卡
+   ========================= */
+
+.wallet-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.wallet-stat {
+  background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+  color: #5b75c8;
+  border-radius: 18px;
+  padding: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #dce8ff;
+}
+
+.wallet-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #6c7fb8;
+}
+
+.wallet-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4f68b7;
+}
+
+/* =========================
+   Gift Grid / 商品卡列表
+   ========================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.gift-card {
+  padding: 16px;
+}
+
+/* =========================
+   Gift Image / 商品圖片區
+   ========================= */
+
+.gift-image {
+  height: 180px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f7faff 0%, #edf3ff 100%);
+  border: 2px dashed #cbdcff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7b8fc8;
+  font-size: 18px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.gift-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =========================
+   Gift Text Content / 商品文字區
+   ========================= */
+
+.gift-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6487d9;
+  margin-bottom: 8px;
+}
+
+.gift-cost {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #5b75c8;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.gift-desc {
+  color: #6d7190;
+  line-height: 1.7;
+  min-height: 72px;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   Gift Status / 商品狀態提示
+   ========================= */
+
+.gift-status {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  background: #f7faff;
+  border: 1px solid #dbe7ff;
+  color: #5f6f9d;
+}
+
+.gift-status.ok {
+  background: #eefbf2;
+  border-color: #cdeed7;
+  color: #3c8b58;
+  font-weight: bold;
+}
+
+/* =========================
+   Tips / 提示卡
+   ========================= */
+
+.tips-list {
+  margin-top: 10px;
+  padding-left: 20px;
+  color: #6d7190;
+  line-height: 1.8;
+}
+
+/* =========================
+   Redeem History / 兌換紀錄
+   ========================= */
+
+.history-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  background: linear-gradient(180deg, #f8fbff 0%, #eff5ff 100%);
+  border: 2px solid #dce8ff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  color: #5f6f9d;
+  line-height: 1.7;
+}
+
+.history-empty {
+  margin-top: 12px;
+  color: #8a93b0;
+  line-height: 1.7;
+}
+
+/* =========================
+   Mobile / 手機版
+   ========================= */
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wallet-stats {
+        grid-template-columns: 1fr;
+  }
+
+  .gift-image {
+    height: 220px;
+  }
+  .top-actions {
+    flex-direction: column;
+  }
+
+  .top-actions .btn {
+    width: 100%;
+  }
+
+  .wallet-value {
+    font-size: 24px;
+  }
+
+  .gift-name {
+    font-size: 18px;
+  }
+}
