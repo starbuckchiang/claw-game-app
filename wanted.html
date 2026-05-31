@@ -1,208 +1,146 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>甜心許願池｜甜心選物 × 冰場好物小舖</title>
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("page-ready");
 
-  <link rel="stylesheet" href="./css/base.css" />
-  <link rel="stylesheet" href="./css/layout.css" />
-  <link rel="stylesheet" href="./css/components.css" />
-  <link rel="stylesheet" href="./css/pages/wanted.css" />
-</head>
-<body>
-  <main class="page-wrap">
-    <section class="section">
-      <div class="hero-card wanted-hero">
-        <div class="center">
-          <div class="wanted-kicker">Wanted Station</div>
+  setupEntryLinkEffects();
+  applyCategoryFromQuery();
+  setupWantedForm();
+});
 
-          <div class="wanted-badges">
-            <span class="badge">Wanted</span>
-            <span class="badge">Google Form</span>
-            <span class="badge">Direct Submit</span>
-          </div>
+function setupEntryLinkEffects() {
+  const entryButtons = document.querySelectorAll("[data-entry-link]");
 
-          <h1 class="wanted-title">甜心許願池</h1>
+  entryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.classList.add("is-clicked");
+      setTimeout(() => {
+        button.classList.remove("is-clicked");
+      }, 180);
+    });
+  });
+}
 
-          <p class="wanted-desc">
-            如果你正在找冰刀鞋、鞋套、旋轉板、服飾、娃娃或裝備，<br />
-            歡迎把需求填在下面，我們一起幫你找找看。
-          </p>
+function applyCategoryFromQuery() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("category");
+  const categorySelect = document.getElementById("wanted-category");
 
-          <div class="wanted-subnote">
-            想找特定尺寸、品牌、風格或二手狀況，也都可以寫清楚。
-          </div>
-        </div>
-      </div>
-    </section>
+  if (!slug || !categorySelect) return;
 
-    <section class="section section-lg">
-      <div class="panel">
-        <div class="section-header">
-          <h2 class="section-title wanted-section-title">熱門徵求分類</h2>
-          <p class="section-desc">
-            先看看目前常見需求，也可以直接進分類頁查看現有徵求內容。
-          </p>
-        </div>
+  const categoryMap = {
+    skates: "冰刀鞋",
+    "shoe-covers": "鞋套",
+    spinner: "旋轉板",
+    clothes: "服飾 / T-shirt / 夾克",
+    plush: "絨毛娃娃 / 可愛小物",
+    hockey: "Hockey 球鞋與裝備"
+  };
 
-        <div class="wanted-list">
-          <a class="wanted-item-link" href="./wanted.html?category=skates" data-entry-link>
-            <div class="wanted-item-title">⛸ 冰刀鞋</div>
-            <div class="wanted-item-text">希望找到尺寸合適、保存良好的二手冰刀鞋。</div>
-          </a>
+  const mappedValue = categoryMap[slug];
+  if (mappedValue) {
+    categorySelect.value = mappedValue;
+  }
+}
 
-          <a class="wanted-item-link" href="./wanted.html?category=shoe-covers" data-entry-link>
-            <div class="wanted-item-title">🧦 鞋套</div>
-            <div class="wanted-item-text">徵求乾淨、耐用、適合日常訓練使用的鞋套。</div>
-          </a>
+function setupWantedForm() {
+  const form = document.getElementById("wantedForm");
+  const statusEl = document.getElementById("wantedFormStatus");
+  const submitBtn = document.getElementById("submitWantedBtn");
 
-          <a class="wanted-item-link" href="./wanted.html?category=spinner" data-entry-link>
-            <div class="wanted-item-title">🌀 旋轉板</div>
-            <div class="wanted-item-text">希望找到狀況良好、適合初學或練習使用的旋轉板。</div>
-          </a>
+  const categoryInput = document.getElementById("wanted-category");
+  const descInput = document.getElementById("wanted-desc");
+  const nicknameInput = document.getElementById("wanted-nickname");
+  const contactInput = document.getElementById("wanted-contact");
+  const dateInput = document.getElementById("wanted-date");
+  const timeInput = document.getElementById("wanted-time");
 
-          <a class="wanted-item-link" href="./wanted.html?category=clothes" data-entry-link>
-            <div class="wanted-item-title">👕 服飾 / T-shirt / 夾克</div>
-            <div class="wanted-item-text">想找適合冰場穿搭或日常使用的服飾好物。</div>
-          </a>
+  if (
+    !form ||
+    !statusEl ||
+    !submitBtn ||
+    !categoryInput ||
+    !descInput ||
+    !nicknameInput ||
+    !contactInput ||
+    !dateInput ||
+    !timeInput
+  ) {
+    return;
+  }
 
-          <a class="wanted-item-link" href="./wanted.html?category=plush" data-entry-link>
-            <div class="wanted-item-title">🧸 絨毛娃娃 / 可愛小物</div>
-            <div class="wanted-item-text">歡迎分享保存良好、可愛療癒的小物或娃娃。</div>
-          </a>
+  function setStatus(message) {
+    statusEl.textContent = message;
+  }
 
-          <a class="wanted-item-link" href="./wanted.html?category=hockey" data-entry-link>
-            <div class="wanted-item-title">🏒 Hockey 球鞋與裝備</div>
-            <div class="wanted-item-text">希望找到實用、狀況良好的 hockey 相關用品。</div>
-          </a>
-        </div>
+  function validateForm() {
+    const category = (categoryInput.value || "").trim();
+    const desc = (descInput.value || "").trim();
+    const nickname = (nicknameInput.value || "").trim();
+    const contact = (contactInput.value || "").trim();
+    const date = (dateInput.value || "").trim();
+    const time = (timeInput.value || "").trim();
 
-        <div class="button-row wanted-nav-row">
-          <a class="btn btn-secondary" href="./index.html" data-entry-link>回首頁</a>
-          <a class="btn btn-gift" href="./qa.html" data-entry-link>看圖片連結教學</a>
-        </div>
-      </div>
-    </section>
+    if (!category) {
+      setStatus("請先選擇物品分類。");
+      categoryInput.focus();
+      return false;
+    }
 
-    <section class="section section-lg">
-      <div class="panel">
-        <div class="section-header">
-          <h2 class="section-title wanted-section-title">留下你的需求</h2>
-          <p class="section-desc">
-            這份表單會直接送進 Google Form，資料越完整越方便後續整理。
-          </p>
-        </div>
+    if (!desc) {
+      setStatus("請填寫徵求物品敘述。");
+      descInput.focus();
+      return false;
+    }
 
-        <form
-          id="wantedForm"
-          class="stack wanted-form"
-          action="https://docs.google.com/forms/d/e/1FAIpQLScKLkUyuTR-5kYBmE6f52bGD7I3jivZ5ah8HSFgaGxA6Q7U4w/formResponse"
-          method="POST"
-          target="_blank"
-          novalidate
-        >
-          <div class="grid-2">
-            <div class="soft-card">
-              <label for="wanted-category"><strong>物品分類</strong></label>
-              <select id="wanted-category" name="entry.811115215" class="form-control" required>
-                <option value="">請選擇分類</option>
-                <option value="冰刀鞋">冰刀鞋</option>
-                <option value="鞋套">鞋套</option>
-                <option value="旋轉板">旋轉板</option>
-                <option value="服飾 / T-shirt / 夾克">服飾 / T-shirt / 夾克</option>
-                <option value="絨毛娃娃 / 可愛小物">絨毛娃娃 / 可愛小物</option>
-                <option value="Hockey 球鞋與裝備">Hockey 球鞋與裝備</option>
-              </select>
-            </div>
+    if (!nickname) {
+      setStatus("請填寫暱稱或呼號。");
+      nicknameInput.focus();
+      return false;
+    }
 
-            <div class="soft-card">
-              <label for="wanted-desc"><strong>徵求物品敘述</strong></label>
-              <textarea
-                id="wanted-desc"
-                name="entry.973854663"
-                rows="5"
-                class="form-control"
-                placeholder="例如：想徵求 23cm 冰刀鞋，保存良好、顏色不限。"
-                required
-              ></textarea>
-            </div>
-          </div>
+    if (!contact) {
+      setStatus("請填寫聯絡方式。");
+      contactInput.focus();
+      return false;
+    }
 
-          <div class="soft-card">
-            <label for="wanted-image"><strong>圖片連結(可不填)</strong></label>
-            <input
-              id="wanted-image"
-              type="text"
-              name="entry.936283346"
-              class="form-control"
-              placeholder="請貼可直接顯示的圖片網址（jpg / png / webp）"
-            />
-            <div class="form-note">
-              🔗 不知道怎麼放圖？點這裡看教學 ☞
-              <a href="./qa.html" target="_blank" rel="noopener noreferrer">常見問題</a><br />
-              若貼 Yahoo、蝦皮等商品頁，分類頁會顯示為「查看原始連結」。
-            </div>
-          </div>
+    if (!date) {
+      setStatus("請選擇日期。");
+      dateInput.focus();
+      return false;
+    }
 
-          <div class="grid-2">
-            <div class="soft-card">
-              <label for="wanted-nickname"><strong>暱稱 或 呼號</strong></label>
-              <input
-                id="wanted-nickname"
-                type="text"
-                name="entry.24028156"
-                class="form-control"
-                placeholder="請輸入暱稱或呼號"
-                required
-              />
-            </div>
+    if (!time) {
+      setStatus("請選擇時間。");
+      timeInput.focus();
+      return false;
+    }
 
-            <div class="soft-card">
-              <label for="wanted-contact"><strong>手機 或 通訊軟體帳號</strong></label>
-              <input
-                id="wanted-contact"
-                type="text"
-                name="entry.244490545"
-                class="form-control"
-                placeholder="例如：LINE / 電話 / IG"
-                required
-              />
-            </div>
-          </div>
+    return true;
+  }
 
-          <div class="grid-2">
-            <div class="soft-card">
-              <label for="wanted-date"><strong>日期</strong></label>
-              <input id="wanted-date" type="date" class="form-control" required />
-            </div>
+  form.addEventListener("submit", (event) => {
+    if (!validateForm()) {
+      event.preventDefault();
+      return;
+    }
 
-            <div class="soft-card">
-              <label for="wanted-time"><strong>時間</strong></label>
-              <input id="wanted-time" type="time" class="form-control" required />
-            </div>
-          </div>
+    const date = dateInput.value.trim();
+    const time = timeInput.value.trim();
+    const originalDesc = descInput.value.trim();
 
-          <input type="hidden" name="entry.1533264183_year" id="gf-date-year" />
-          <input type="hidden" name="entry.1533264183_month" id="gf-date-month" />
-          <input type="hidden" name="entry.1533264183_day" id="gf-date-day" />
-          <input type="hidden" name="entry.1943315019_hour" id="gf-time-hour" />
-          <input type="hidden" name="entry.1943315019_minute" id="gf-time-minute" />
+    const dateTimeText = `\n希望時間：${date} ${time}`;
+    if (!originalDesc.includes("希望時間：")) {
+      descInput.value = `${originalDesc}${dateTimeText}`;
+    }
 
-          <div class="button-row wanted-form-actions">
-            <button type="submit" class="btn btn-start" id="submitWantedBtn">送出徵求</button>
-            <a class="btn btn-secondary" href="./wanted.html" data-entry-link>回分類首頁</a>
-            <a class="btn btn-gift" href="./index.html" data-entry-link>回首頁</a>
-          </div>
+    submitBtn.disabled = true;
+    submitBtn.textContent = "送出中…";
+    setStatus("即將開啟 Google Form 送出頁面，請稍候…");
 
-          <div id="wantedFormStatus" class="notice-box wanted-form-note">
-            填好後按「送出徵求」，會開新分頁送到 Google Form。
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <script type="module" src="./js/pages/wanted.js"></script>
-</body>
-</html>
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "送出徵求";
+      setStatus("如果已成功開啟新分頁，請在 Google Form 頁面完成送出。");
+    }, 1500);
+  });
+}
