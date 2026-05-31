@@ -1,0 +1,560 @@
+/* =========================
+   Page Headings / index07 頁面標題區
+   ========================= */
+
+.page-title {
+  margin-bottom: 10px;
+  color: #d45c92;
+  text-align: center;
+}
+
+.page-desc {
+  color: #8b6678;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* =========================
+   Top Action Links / 頂部導流按鈕區
+   ========================= */
+
+.icon-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* =========================
+   HUD / 狀態列（金幣、分數、點數等）
+   ========================= */
+
+.hud {
+  margin-top: 18px;
+  background: #fff;
+  border: 3px solid #f8bfd8;
+  border-radius: 18px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.hud > div {
+  text-align: center;
+}
+
+#message {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  color: #d45c92;
+}
+
+/* =========================
+   Main Layout / 主版面
+   左邊是娃娃機與補給站
+   中右是展示櫃、排行榜、活動卡
+   ========================= */
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 16px;
+  margin-top: 18px;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================
+   Shared Section Cards / 共用區塊內距
+   ========================= */
+
+.machine,
+.showcase,
+.leaderboard,
+.adbox,
+.promo-card {
+  padding: 16px;
+}
+
+/* =========================
+   Claw Machine / 娃娃機上方裝飾條
+   ========================= */
+
+.top-bar {
+  width: 100%;
+  height: 18px;
+  background: repeating-linear-gradient(
+    45deg,
+    #ffd3e6,
+    #ffd3e6 12px,
+    #ffc1da 12px,
+    #ffc1da 24px
+  );
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   Claw Track / 爪子軌道區
+   ========================= */
+
+.claw-track {
+  position: relative;
+  height: 80px;
+}
+
+.claw-arm {
+  position: absolute;
+  top: 0;
+  left: 180px;
+  width: 80px;
+  transition: left 0.2s ease;
+  z-index: 10;
+}
+
+.claw-head {
+  width: 42px;
+  height: 14px;
+  margin: 0 auto;
+  background: #ff89b5;
+  border-radius: 999px;
+}
+
+.rope {
+  width: 4px;
+  height: 28px;
+  background: #9c7b8b;
+  margin: 0 auto;
+  transition: height 0.3s ease;
+}
+
+.claw {
+  position: relative;
+  width: 40px;
+  height: 30px;
+  margin: 0 auto;
+}
+
+.finger {
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 24px;
+  border: 4px solid #8e6f7f;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: transparent;
+}
+
+.finger.left {
+  left: 2px;
+  transform: rotate(14deg);
+}
+
+.finger.right {
+  right: 2px;
+  transform: rotate(-14deg);
+}
+
+.claw.closed .finger.left {
+  transform: rotate(5deg);
+}
+
+.claw.closed .finger.right {
+  transform: rotate(-5deg);
+}
+
+/* =========================
+   Play Area / 娃娃掉落與顯示區
+   ========================= */
+
+.play-area {
+  position: relative;
+  margin-top: 8px;
+  height: 340px;
+  border: 4px solid #ffd0e3;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fffafc 0%, #ffeef5 100%);
+  overflow: hidden;
+}
+
+.play-area::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 38px;
+  background: #ffd7e8;
+}
+
+.prize {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  box-shadow: 0 6px 14px rgba(225, 131, 175, 0.12);
+  user-select: none;
+  transition: left 0.4s ease, top 0.4s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+/* =========================
+   Buttons Row / 操作按鈕區
+   ========================= */
+
+.controls,
+.board-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #8b6678;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* =========================
+   Showcase / 展示櫃
+   ========================= */
+
+.showcase-grid {
+  min-height: 180px;
+  border: 2px dashed #f6c2d9;
+  border-radius: 16px;
+  background: #fffafc;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 12px;
+  justify-items: center;
+  align-items: center;
+}
+
+.toy {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 6px 14px rgba(225,131,175,.12);
+}
+
+.gift-progress {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff7fb;
+  color: #8b6678;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.7;
+  border: 2px solid #f6d3e2;
+}
+
+/* =========================
+   Leaderboard / 排行榜
+   ========================= */
+
+ol {
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.9;
+  color: #7b5b6b;
+  min-height: 140px;
+}
+
+/* =========================
+   Ad Supply Box / 甜心補給站
+   ========================= */
+
+.adbox {
+  text-align: center;
+  background: linear-gradient(180deg, #fffafc 0%, #fff0f6 100%);
+}
+
+.ad-slot {
+  border: 2px dashed #f6c2d9;
+  border-radius: 16px;
+  padding: 16px;
+  background: #fff;
+  color: #8b6678;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+
+.ad-remaining {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #a36d85;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* =========================
+   Promo Card / 本週精選好物
+   ========================= */
+
+.promo-card {
+  text-align: center;
+  background: linear-gradient(180deg, #fffdfd 0%, #fff4f8 100%);
+}
+
+.promo-title {
+  color: #d45c92;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.promo-text {
+  color: #8b6678;
+  line-height: 1.7;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* =========================
+   Reward Video Modal / 廣告影片彈窗
+   ========================= */
+
+.ad-video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 20, 28, 0.72);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.ad-video-modal.show {
+  display: flex;
+}
+
+.ad-video-panel {
+  width: min(92vw, 520px);
+  background: #fff;
+  border: 4px solid #f8bfd8;
+  border-radius: 24px;
+  box-shadow: 0 18px 42px rgba(80, 45, 62, 0.28);
+  overflow: hidden;
+}
+
+.ad-video-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(90deg, #ffe6f2, #fff3f8);
+  border-bottom: 2px solid #f6d5e4;
+}
+
+.ad-video-title {
+  font-weight: bold;
+  color: #d45c92;
+  font-size: 16px;
+}
+
+.ad-video-close {
+  border: none;
+  background: #ff8fbc;
+  color: white;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: none;
+  min-width: 0;
+  padding: 0;
+}
+
+.ad-video-body {
+  padding: 16px;
+}
+
+.ad-video-player {
+  width: 100%;
+  border-radius: 18px;
+  background: #000;
+  display: block;
+}
+
+.ad-video-note {
+  margin-top: 12px;
+  text-align: center;
+  color: #8b6678;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.ad-video-status {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #d45c92;
+}
+
+/* =========================
+   Mobile Layout / 手機版
+   排序固定為：
+   娃娃機 → 補給站 → 展示櫃 → 排行榜 → 精選好物
+   ========================= */
+
+@media screen and (max-width: 900px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .left-column {
+    display: contents;
+  }
+
+  .machine { order: 1; }
+  .adbox { order: 2; }
+  .showcase { order: 3; }
+  .leaderboard { order: 4; }
+  .promo-card { order: 5; }
+
+  .hud {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .hud > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon-links,
+  .controls,
+  .board-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .play-area {
+    height: 190px;
+  }
+
+  .play-area::after {
+    height: 28px;
+  }
+
+  .claw-track {
+    height: 56px;
+  }
+
+  .claw-arm {
+    width: 64px;
+    transform: none;
+  }
+
+  .claw-head {
+    width: 34px;
+    height: 10px;
+  }
+
+  .rope {
+      height: 20px;
+  }
+  .claw {
+    width: 28px;
+    height: 22px;
+  }
+
+  .finger {
+    width: 8px;
+    height: 16px;
+    border-width: 3px;
+  }
+
+  .prize {
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+  }
+
+  .showcase-grid {
+    min-height: 140px;
+  }
+
+  .toy {
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+  }
+
+  ol {
+    min-height: auto;
+    padding-left: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  .gift-progress,
+  .ad-slot,
+  .promo-text,
+  .hint,
+  .ad-remaining,
+  .ad-video-note,
+  .ad-video-status {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .ad-video-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .ad-video-header {
+    padding: 12px 14px;
+  }
+
+  .ad-video-title {
+    font-size: 15px;
+  }
+
+  .ad-video-body {
+    padding: 12px;
+  }
+}
