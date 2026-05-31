@@ -1,1 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網站模組化維護建議</title>
+  <style>
+    * { box-sizing: border-box; }
 
+    body {
+      margin: 0;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background: #f7f8fc;
+      color: #2f3441;
+      line-height: 1.8;
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .doc {
+      background: #fff;
+      border: 1px solid #e6e9f2;
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: 0 10px 28px rgba(39, 52, 89, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      color: #304674;
+    }
+
+    h2 {
+      margin-top: 32px;
+      margin-bottom: 10px;
+      font-size: 22px;
+      color: #425b8f;
+      border-left: 6px solid #9fb7f5;
+      padding-left: 12px;
+    }
+
+    h3 {
+      margin-top: 22px;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #546b99;
+    }
+
+    p {
+      margin: 10px 0;
+      color: #3f4758;
+    }
+
+    ul, ol {
+      padding-left: 22px;
+      margin: 10px 0;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .lead {
+      font-size: 16px;
+      color: #50607f;
+      background: #f3f6ff;
+      border: 1px solid #dce6ff;
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .box {
+      background: #fafbff;
+      border: 1px solid #e2e7f6;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e9f0ff;
+      color: #4766a8;
+      font-size: 13px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .code {
+      display: block;
+      background: #1f2430;
+      color: #eef2ff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 12px 0;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px dashed #d9deea;
+      color: #667089;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .wrap {
+        padding: 14px 10px 28px;
+      }
+
+      .doc {
+        padding: 18px 14px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      h3 {
+        font-size: 16px;
+      }
+
+      body {
+        line-height: 1.75;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="doc">
+      <h1>網站模組化維護建議</h1>
+
+      <p class="lead">
+        這份建議書的目的，是協助目前網站從「功能能動、但越改越亂」的狀態，
+        逐步整理成「容易更新、容易維護、容易擴充」的模組化結構。
+        以目前網站已有的首頁、夾娃娃機、補給站、展示櫃、排行榜與 gift 頁為核心，
+        建議優先做的是：拆分結構、抽共用元件、分離樣式與邏輯、統一資料來源。
+      </p>
+
+      <h2>一、目前網站維護困難的原因</h2>
+
+      <p>
+        從目前網站演進的方式來看，功能是逐步疊加上去的，例如：
+        先有基礎頁面，再加入金幣、分數、排行榜、展示櫃、gift 頁、補給站、影片 modal 等。
+        這種做法短期很有效，但當功能變多之後，會開始出現以下問題：
+      </p>
+
+      <div class="box">
+        <span class="tag">問題 1</span>
+        <span class="tag">結構耦合</span>
+        <p>
+          HTML、CSS、JS 都集中在單一檔案裡，導致任何一個小功能變動，都可能影響整頁。
+          像是手機版排版、獎勵影片 modal、排行榜、夾娃娃邏輯彼此容易互相牽動。
+        </p>
+      </div>
+
+      <div class="box">
+        <span class="tag">問題 2</span>
+        <span class="tag">補丁疊加</span>
+        <p>
+          當某個區塊出問題時，常常會直接再補一段 CSS 或 JS。
+          久了之後就容易出現重複規則、覆蓋順序混亂、函式責任不清的情況。
+        </p>
+      </div>
+
+      <div class="box">
+        <span class="tag">問題 3</span>
+                <span class="tag">頁面複製式擴充</span>
+        <p>
+          目前像 index04、index05、index06、index07 這種演進方式，雖然保留了版本，
+          但也代表很多相同邏輯被複製到不同頁面。之後只要要修一個 bug，
+          就可能需要多份一起改。
+        </p>
+      </div>
+
+      <div class="box">
+        <span class="tag">問題 4</span>
+        <span class="tag">共用 UI 未抽離</span>
+        <p>
+          例如補給站卡片、按鈕樣式、排行榜卡片、商品卡片、提示訊息等，
+          其實都有明顯共用模式，但目前還是寫死在各頁內，導致視覺與維護成本增加。
+        </p>
+      </div>
+
+      <h2>二、模組化的目標</h2>
+
+      <p>網站模組化不是為了「看起來工程化」，而是為了讓你之後更容易做這些事：</p>
+
+      <ul>
+        <li>新增一個活動頁，不需要重抄整份 index</li>
+        <li>修改按鈕樣式，只要改一個地方</li>
+        <li>調整手機版排版，不會連桌機版一起壞掉</li>
+        <li>更換獎勵影片機制，不會去影響夾娃娃邏輯</li>
+        <li>gift.html 與主頁使用同一套風格與資料格式</li>
+        <li>未來如果要接真實後台或雲端資料，也比較容易升級</li>
+      </ul>
+
+      <div class="box">
+        <strong>一句話總結：</strong>
+        模組化的核心不是把檔案拆多，而是讓每個區塊各自負責一件事，彼此之間用清楚的資料與介面連接。
+      </div>
+
+      <h2>三、建議優先拆分的模組</h2>
+
+      <h3>1. 頁面層（Pages）</h3>
+      <p>目前網站至少可分成以下頁面層級：</p>
+      <ul>
+        <li>首頁 / 主遊戲頁（index07.html）</li>
+        <li>實體商品兌換頁（gift.html）</li>
+        <li>未來可加：活動頁、商品詳情頁、關於頁</li>
+      </ul>
+
+      <h3>2. 區塊層（Sections）</h3>
+      <p>主遊戲頁內可以再拆成幾個穩定區塊：</p>
+      <ul>
+        <li>娃娃機區塊</li>
+        <li>甜心補給站</li>
+        <li>展示櫃</li>
+        <li>排行榜</li>
+        <li>本週精選好物</li>
+        <li>影片 modal</li>
+      </ul>
+
+      <h3>3. 元件層（Components）</h3>
+      <p>每個區塊裡又有可重複使用的元件，例如：</p>
+      <ul>
+        <li>卡片容器（card）</li>
+        <li>主按鈕 / 次按鈕 / 圓角按鈕</li>
+        <li>統計數字顯示區（HUD item）</li>
+        <li>排行榜項目</li>
+        <li>展示櫃 item</li>
+        <li>商品卡片</li>
+        <li>狀態提示條</li>
+      </ul>
+            <h2>四、建議的檔案結構</h2>
+
+      <p>
+        目前最適合你的，不是一下切到很重的框架，而是先做「靜態站可承受的模組化」。
+        也就是保留 HTML 可直接開啟的優點，但把 CSS、JS、資料拆出去。
+      </p>
+
+      <div class="code">/
+├─ index.html
+├─ index07.html
+├─ gift.html
+├─ css/
+│ ├─ base.css
+│ ├─ layout.css
+│ ├─ components.css
+│ ├─ pages/
+│ │  ├─ index07.css
+│ │  └─ gift.css
+├─ js/
+│ ├─ state.js
+│ ├─ storage.js
+│ ├─ ui/
+│ │  ├─ hud.js
+│ │  ├─ modal.js
+│ │  ├─ leaderboard.js
+│ │  ├─ showcase.js
+│ │  └─ gift-cards.js
+│ ├─ game/
+│ │  ├─ claw-machine.js
+│ │  ├─ prizes.js
+│ │  ├─ rewards.js
+│ │  └─ ad-video.js
+│ └─ pages/
+│ ├─ index07.js
+│ └─ gift.js
+├─ data/
+│ ├─ gifts.js
+│ ├─ prizes.js
+│ └─ config.js
+├─ image/
+│ └─ image.png
+├─ video/
+│ └─ ad.mp4
+└─ docs/
+   └─ 網站模組化維護建議.html</div>
+
+      <h2>五、CSS 模組化建議</h2>
+
+      <p>
+        目前樣式大多集中在單一 style 區塊內，短期方便，但後期很難維護。
+        建議 CSS 分成三層：
+      </p>
+
+      <h3>1. base.css</h3>
+      <p>放全站共用基礎，例如：</p>
+      <ul>
+        <li>body 字體</li>
+        <li>基本背景色</li>
+        <li>標題字級</li>
+        <li>按鈕的基礎 reset</li>
+        <li>全站共用 spacing 規則</li>
+      </ul>
+
+      <h3>2. layout.css</h3>
+      <p>放整體布局，例如：</p>
+      <ul>
+        <li>.wrap</li>
+        <li>.layout</li>
+        <li>.left-column</li>
+        <li>手機版排序規則</li>
+      </ul>
+
+      <h3>3. components.css</h3>
+      <p>放共用元件，例如：</p>
+      <ul>
+        <li>.card</li>
+        <li>.btn / .start-btn / .coin-btn</li>
+        <li>.hud</li>
+        <li>.promo-card</li>
+        <li>.gift-status</li>
+        <li>.ad-video-modal</li>
+      </ul>
+
+      <h3>4. pages/index07.css、pages/gift.css</h3>
+      <p>只放該頁獨有樣式，避免互相汙染。</p>
+
+      <div class="box">
+        <strong>建議原則：</strong>
+        共用樣式盡量不要寫在頁面檔內；頁面檔內只保留該頁真的獨有的細節。
+      </div>
+
+      <h2>六、JavaScript 模組化建議</h2>
+
+      <p>
+        現在的 JS 已經包含多個責任：資料儲存、娃娃生成、爪子移動、分數計算、廣告 modal、
+        排行榜、展示櫃、補給站。這種寫法在功能變多之後，最容易讓 bug 互相干擾。
+      </p>
+
+      <p>建議至少拆成以下幾塊：</p>
+
+      <h3>1. state.js</h3>
+      <p>只管理狀態，例如：</p>
+      <ul>
+        <li>coins</li>
+        <li>score</li>
+        <li>points</li>
+        <li>tickets</li>
+        <li>bonusPlays</li>
+        <li>catchCount</li>
+        <li>failStreak</li>
+      </ul>
+
+      <h3>2. storage.js</h3>
+      <p>只負責 localStorage 讀寫，避免每個功能都自己存。</p>
+
+      <h3>3. claw-machine.js</h3>
+      <p>只處理：</p>
+      <ul>
+        <li>createPrizes()</li>
+        <li>moveClaw()</li>
+        <li>dropClaw()</li>
+        <li>resetClawPosition()</li>
+      </ul>
+
+      <h3>4. rewards.js</h3>
+      <p>處理獎勵邏輯：</p>
+      <ul>
+        <li>dailyBonus()</li>
+        <li>rewardTicketIfNeeded()</li>
+        <li>rewardBonusGiftIfNeeded()</li>
+        <li>grantAdReward()</li>
+      </ul>
+
+      <h3>5. ad-video.js</h3>
+      <p>只處理補給站影片 modal：</p>
+      <ul>
+        <li>openAdVideoModal()</li>
+        <li>closeAdVideoModal()</li>
+        <li>影片播完狀態</li>
+        <li>每日 3 次限制</li>
+      </ul>
+
+      <h3>6. leaderboard.js / showcase.js / gift.js</h3>
+      <p>各自負責自己的顯示與更新，避免主檔案太胖。</p>
+
+      <div class="box">
+        <strong>建議原則：</strong>
+        一個模組只做一件事。不要讓同一支 JS 檔案同時處理 UI、儲存、動畫、商業規則與頁面初始化。
+      </div>
+            <h2>七、資料層也應該模組化</h2>
+
+      <p>
+        除了樣式和邏輯，資料本身也要抽出來，這樣未來換獎品、換商品、換活動不必改邏輯程式。
+      </p>
+
+      <p>建議先抽這幾種資料：</p>
+      <ul>
+        <li>娃娃池資料（prizePool）</li>
+        <li>bonus 禮物資料（bonusGiftPool）</li>
+        <li>gift 商品資料（gifts）</li>
+        <li>系統設定（每日補給次數、廣告獎勵、夾 5 送券、夾 10 送 1）</li>
+      </ul>
+
+      <div class="code">export const appConfig = {
+  adRewardCoins: 100,
+  adRewardBonusPlay: 1,
+  maxDailyAdRewards: 3,
+  ticketEveryCatch: 5,
+  bonusGiftEveryCatch: 10
+};</div>
+
+      <p>
+        這樣之後你想改規則，例如：
+        「看影片改送 80 金幣」、
+        「夾 8 次送 1 張券」，
+        就不用改一堆 function，只改設定檔即可。
+      </p>
+
+      <h2>八、頁面共用元件建議</h2>
+
+      <p>以下元件非常值得抽成共用：</p>
+
+      <ul>
+        <li>按鈕系統：主按鈕、次按鈕、導流按鈕</li>
+        <li>資訊卡：補給站卡、活動卡、資產卡、提示卡</li>
+        <li>排行榜項目</li>
+        <li>展示櫃 item</li>
+        <li>gift 商品卡</li>
+        <li>modal（影片、提示、確認）</li>
+      </ul>
+
+      <p>
+        如果這些元件長期維持一致，整站視覺會更穩定，
+        之後你就算新增頁面，也不會像另外做一個新網站。
+      </p>
+
+      <h2>九、建議的改造順序</h2>
+
+      <p>模組化最好分階段，不要一次全改，否則容易把目前能跑的版本弄壞。</p>
+
+      <h3>第一階段：整理穩定版</h3>
+      <ul>
+        <li>把目前可用的 index07 固定成基底</li>
+        <li>確認 gift.html 可正常讀取點數與券</li>
+        <li>清掉不再使用的補丁版 index</li>
+      </ul>
+
+      <h3>第二階段：拆 CSS</h3>
+      <ul>
+        <li>先把 style 區塊抽成外部 css</li>
+        <li>至少拆成 base / layout / page</li>
+      </ul>
+
+      <h3>第三階段：拆資料與 JS</h3>
+      <ul>
+        <li>先抽出 gifts / prizes / config</li>
+        <li>再拆 claw-machine / rewards / ad-video</li>
+      </ul>
+
+      <h3>第四階段：統一初始化流程</h3>
+      <ul>
+        <li>整理頁面載入順序</li>
+        <li>不要每次都重複 `updateUI()`、`createPrizes()`、`renderShowcase()` 寫法</li>
+      </ul>
+
+      <h3>第五階段：再考慮升級工具鏈</h3>
+      <p>
+        如果未來頁面變更多、功能更複雜，再考慮導入 Vite、Webpack、甚至框架；
+        但現階段其實先把靜態站整理乾淨就已經能改善非常多。
+      </p>
+            <h2>十、對目前網站最實際的具體建議</h2>
+
+      <h3>1. 不要再靠複製 index04 / 05 / 06 / 07 來疊功能</h3>
+      <p>
+        版本保留可以理解，但如果未來還是每加一個功能就另存新檔，
+        你很快就會面臨「哪一份才是最新的」與「修一個 bug 要改五份」的問題。
+      </p>
+
+      <h3>2. 把 index07 定為目前正式基底</h3>
+      <p>
+        現在最穩的做法，是把 index07 當成主線版本，
+        未來所有補給站、廣告影片、活動卡、gift 串接，都從這版延伸。
+      </p>
+
+      <h3>3. gift.html 要和主頁共享資料格式</h3>
+      <p>
+        例如點數、兌換券、商品資料、已兌換紀錄，
+        都應該透過一致的 key 與資料格式管理，避免主頁存一套、gift 頁讀另一套。
+      </p>
+
+      <h3>4. 補給站 / 廣告 modal 應維持獨立模組</h3>
+      <p>
+        補給站其實已經接近一個完整的商業化功能：
+        有每日次數限制、有 rewarded video、有狀態提示、有回饋資源。
+        這類邏輯應維持獨立，避免和娃娃機主邏輯混寫。
+      </p>
+
+      <h3>5. 所有圖片與影片路徑要統一管理</h3>
+      <p>
+        目前圖片在 image 資料夾、影片在 video 資料夾，這是正確方向。
+        建議後續統一規則，例如：
+      </p>
+
+      <div class="code">/image/xxx.png
+/video/xxx.mp4
+/data/gifts.js</div>
+
+      <p>
+        只要規則統一，之後不論是換圖、換影片、換活動素材，都會簡單很多。
+      </p>
+
+      <h2>十一、後續如果要商業化，模組化會更重要</h2>
+
+      <p>
+        目前網站已經不只是展示頁，而是有初步的遊戲循環與商業元素：
+      </p>
+
+      <ul>
+        <li>金幣</li>
+        <li>免費次數</li>
+        <li>獎勵影片</li>
+        <li>點數</li>
+        <li>兌換券</li>
+        <li>實體商品兌換</li>
+      </ul>
+
+      <p>
+        這表示未來如果你要再加入：
+      </p>
+
+      <ul>
+        <li>商品分類</li>
+        <li>活動頁</li>
+        <li>本週限定商品</li>
+        <li>聯名合作商品</li>
+        <li>真實廣告素材</li>
+        <li>更多 modal / 任務機制</li>
+      </ul>
+
+      <p>
+        那模組化不是加分項，而是必要條件。否則每加一個功能，維護難度都會倍增。
+      </p>
+
+      <div class="box">
+        <strong>重點提醒：</strong>
+        真正的模組化，不是為了讓程式看起來專業，而是為了讓你未來每次更新時，
+        不再害怕「改這裡會不會把別的地方弄壞」。
+      </div>
+
+      <h2>十二、結論</h2>
+
+      <p>
+        目前網站已經具備一個小型互動產品的雛形，
+        而不是單純一頁式網站。因此，繼續使用單檔案累加功能的方式，
+        會讓後續維護、除錯、改版與商業化越來越吃力。
+      </p>
+
+      <p>
+        最合適的方向，是以目前穩定版為基底，逐步做以下三件事：
+      </p>
+
+      <ol>
+        <li><strong>固定正式基底頁</strong>：以 index07 為主，不再分裂主線版本</li>
+        <li><strong>拆分共用模組</strong>：把 CSS、JS、資料抽離成獨立模組</li>
+        <li><strong>統一資料與元件</strong>：讓主頁與 gift 頁共享資料、樣式與互動邏輯</li>
+      </ol>
+
+      <p>
+        只要這三件事開始做，之後網站無論是要新增功能、調整商業模式、接廣告影片、
+        還是加入更多兌換商品，都會變得穩定很多。
+      </p>
+
+      <div class="footer-note">
+        本文件適合作為目前網站後續整理與改版的基礎建議稿。
+        若後續要進一步落地，可再延伸成：
+        「檔案結構實作版」、
+        「元件拆分清單」、
+        「index07 重構計畫」、
+        或「gift.html 模組化改造清單」。
+      </div>
+    </article>
+  </div>
+</body>
+</html>
