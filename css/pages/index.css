@@ -1,0 +1,98 @@
+/* =========================
+   Index Page / 導流首頁專屬樣式
+   ========================= */
+
+/* 首頁 hero 區額外調整 */
+.index-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.index-hero::before,
+.index-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.index-hero::before {
+  width: 220px;
+  height: 220px;
+  top: -70px;
+  left: -60px;
+  background: radial-gradient(circle, #ffd8ea 0%, rgba(255, 216, 234, 0) 70%);
+}
+
+.index-hero::after {
+  width: 260px;
+  height: 260px;
+  right: -80px;
+  bottom: -100px;
+  background: radial-gradient(circle, #e8d9ff 0%, rgba(232, 217, 255, 0) 70%);
+}
+
+/* 首頁主標區徽章列 */
+.hero-badges {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+/* 首頁入口卡區 */
+.entry-grid {
+  align-items: stretch;
+}
+
+.entry-card .button-row {
+  margin-top: 12px;
+}
+
+/* 功能亮點區 */
+.feature-grid {
+  align-items: stretch;
+}
+
+.feature-item {
+  height: 100%;
+}
+
+/* 更新紀錄區 */
+.update-panel {
+  height: 100%;
+}
+
+/* 小提醒 */
+.index-notice {
+  margin-top: 18px;
+}
+
+/* 頁尾導流 */
+.index-footer-actions {
+  margin-top: 20px;
+}
+
+/* 手機版 */
+@media (max-width: 900px) {
+  .index-hero::before {
+    width: 160px;
+    height: 160px;
+    top: -50px;
+    left: -50px;
+  }
+
+  .index-hero::after {
+    width: 180px;
+    height: 180px;
+    right: -50px;
+    bottom: -70px;
+  }
+
+  .hero-badges {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+}
