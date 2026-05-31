@@ -29,7 +29,7 @@ function setupWantedForm() {
   const FORM_URL =
     "https://docs.google.com/forms/d/e/1FAIpQLScKLkUyuTR-5kYBmE6f52bGD7I3jivZ5ah8HSFgaGxA6Q7U4w/formResponse";
 
-  form.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const formData = new FormData(form);
@@ -62,48 +62,63 @@ function setupWantedForm() {
 
     const description = descriptionParts.join("\n");
 
-    const payload = new URLSearchParams();
-    payload.append("entry.811115215", category);
-    payload.append("entry.973854663", description);
-    payload.append("entry.936283346", "");
-    payload.append("entry.24028156", nickname);
-    payload.append("entry.244490545", contact);
-
-    if (date) {
-      const [year, month, day] = date.split("-");
-      payload.append("entry.1533264183_year", year || "");
-      payload.append("entry.1533264183_month", month || "");
-      payload.append("entry.1533264183_day", day || "");
-    }
-
-    if (time) {
-      const [hour, minute] = time.split(":");
-      payload.append("entry.1943315019_hour", hour || "");
-      payload.append("entry.1943315019_minute", minute || "");
-    }
-
     submitBtn.disabled = true;
     submitBtn.textContent = "送出中…";
     statusEl.textContent = "正在送出你的願望，請稍候…";
 
-    try {
-      await fetch(FORM_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-        },
-        body: payload.toString()
-      });
+    const hiddenForm = document.createElement("form");
+    hiddenForm.action = FORM_URL;
+    hiddenForm.method = "POST";
+    hiddenForm.target = "hidden_iframe";
+    hiddenForm.style.display = "none";
 
-      statusEl.textContent = "送出成功！你的願望已送出，我們會整理進許願池。";
-      form.reset();
-    } catch (error) {
-      console.error("wanted form submit error:", error);
-      statusEl.textContent = "送出失敗，請稍後再試。";
-    } finally {
+    const fields = {
+      "entry.811115215": category,
+      "entry.973854663": description,
+      "entry.936283346": "",
+      "entry.24028156": nickname,
+      "entry.244490545": contact
+    };
+
+    if (date) {
+      const [year, month, day] = date.split("-");
+      fields["entry.1533264183_year"] = year || "";
+      fields["entry.1533264183_month"] = month || "";
+      fields["entry.1533264183_day"] = day || "";
+    }
+
+    if (time) {
+      const [hour, minute] = time.split(":");
+      fields["entry.1943315019_hour"] = hour || "";
+      fields["entry.1943315019_minute"] = minute || "";
+    }
+
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      hiddenForm.appendChild(input);
+    });
+
+    let iframe = document.getElementById("hidden_iframe");
+    if (!iframe) {
+      iframe = document.createElement("iframe");
+      iframe.name = "hidden_iframe";
+      iframe.id = "hidden_iframe";
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+    }
+
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+
+    setTimeout(() => {
+      hiddenForm.remove();
+      statusEl.textContent = "送出完成，請到 Google Sheet / Form Responses 確認是否收到新資料。";
       submitBtn.disabled = false;
       submitBtn.textContent = "送出願望";
-    }
+      form.reset();
+    }, 1200);
   });
 }
