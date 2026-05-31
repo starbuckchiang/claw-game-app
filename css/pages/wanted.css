@@ -184,5 +184,113 @@ input.form-control[type="time"] {
 }
 
 .soft-card label {
-  display: inline
-...(truncated)...
+  display: inline-block;
+  color: #7a5367;
+}
+
+.form-note {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #9a7486;
+  line-height: 1.6;
+}
+
+.form-note a {
+  color: #5b8ec9;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.form-note a:hover {
+  text-decoration: underline;
+}
+
+.wanted-form-actions {
+  margin-top: 8px;
+}
+
+.wanted-form-actions .btn {
+  min-width: 180px;
+}
+
+.wanted-form-note {
+  margin-top: 0;
+}
+
+.page-ready .wanted-hero,
+.page-ready .panel,
+.page-ready .wanted-item-link {
+  animation: wantedFadeRise 0.72s ease both;
+}
+
+.page-ready .wanted-item-link:nth-child(2) {
+  animation-delay: 0.05s;
+}
+
+.page-ready .wanted-item-link:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+.page-ready .wanted-item-link:nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+.page-ready .wanted-item-link:nth-child(5) {
+  animation-delay: 0.2s;
+}
+
+.page-ready .wanted-item-link:nth-child(6) {
+  animation-delay: 0.25s;
+}
+
+@keyframes wantedFadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.is-clicked {
+  transform: scale(0.985);
+}
+
+@media (max-width: 900px) {
+  .wanted-hero {
+    padding: 34px 18px;
+    border-radius: 24px;
+  }
+
+  .wanted-title {
+    font-size: 34px;
+    line-height: 1.24;
+  }
+
+  .wanted-desc {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .wanted-form-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .wanted-item-title {
+    font-size: 16px;
+  }
+
+  .wanted-item-text,
+  .wanted-form-note {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .form-control {
+    font-size: 16px;
+  }
+}
