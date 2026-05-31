@@ -26,56 +26,66 @@ function setupWantedForm() {
 
   if (!form || !submitBtn || !statusEl) return;
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbzgq2WDR9WHHksID1BWgV8DiEhYD5gq8ijOocl3T-haz_yvrVCRoe5z7GEvgDlZduO1/exec";
-form.addEventListener("submit", async (event) => {
+  const FORM_URL =
+    "https://docs.google.com/forms/d/e/1FAIpQLScKLkUyuTR-5kYBmE6f52bGD7I3jivZ5ah8HSFgaGxA6Q7U4w/formResponse";
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const formData = new FormData(form);
 
-    const payload = {
-      category: formData.get("category")?.toString().trim() || "",
-      itemName: formData.get("itemName")?.toString().trim() || "",
-      brand: formData.get("brand")?.toString().trim() || "",
-      size: formData.get("size")?.toString().trim() || "",
-      budget: formData.get("budget")?.toString().trim() || "",
-      style: formData.get("style")?.toString().trim() || "",
-      note: formData.get("note")?.toString().trim() || "",
-      contact: formData.get("contact")?.toString().trim() || "",
-      nickname: formData.get("nickname")?.toString().trim() || "",
-      page: "wanted-form.html",
-      submittedAt: new Date().toISOString()
-    };
+    const category = (formData.get("category") || "").toString().trim();
+    const itemName = (formData.get("itemName") || "").toString().trim();
+    const brand = (formData.get("brand") || "").toString().trim();
+    const size = (formData.get("size") || "").toString().trim();
+    const budget = (formData.get("budget") || "").toString().trim();
+    const style = (formData.get("style") || "").toString().trim();
+    const note = (formData.get("note") || "").toString().trim();
+    const contact = (formData.get("contact") || "").toString().trim();
+    const nickname = (formData.get("nickname") || "").toString().trim();
 
-    if (!payload.category && !payload.itemName) {
-      statusEl.textContent = "請至少填寫「商品分類」或「想要的商品名稱 / 類型」。";
+    if (!category && !itemName && !note) {
+      statusEl.textContent = "請至少填寫商品分類、商品名稱，或其他備註其中一項。";
       return;
     }
+
+    const descriptionParts = [
+      itemName ? `想要的商品名稱 / 類型：${itemName}` : "",
+      brand ? `品牌：${brand}` : "",
+      size ? `尺寸 / 規格：${size}` : "",
+      budget ? `預算：${budget}` : "",
+      style ? `風格 / 顏色 / 補充條件：${style}` : "",
+      note ? `其他備註：${note}` : ""
+    ].filter(Boolean);
+
+    const description = descriptionParts.join("\n");
+
+    const payload = new URLSearchParams();
+    payload.append("entry.811115215", category);
+    payload.append("entry.973854663", description);
+    payload.append("entry.936283346", "");
+    payload.append("entry.24028156", nickname);
+    payload.append("entry.244490545", contact);
 
     submitBtn.disabled = true;
     submitBtn.textContent = "送出中…";
     statusEl.textContent = "正在送出你的願望，請稍候…";
 
     try {
-      const response = await fetch(API_URL, {
+      await fetch(FORM_URL, {
         method: "POST",
-        mode: "cors",
+        mode: "no-cors",
         headers: {
-          "Content-Type": "text/plain;charset=utf-8"
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
         },
-        body: JSON.stringify(payload)
+        body: payload.toString()
       });
 
-      const text = await response.text();
-
-      if (!response.ok) {
-        throw new Error(text || "送出失敗");
-      }
-
-      statusEl.textContent = "送出成功！你的願望已經進入許願池，謝謝你的分享。";
+      statusEl.textContent = "送出成功！你的願望已送出，我們會整理進許願池。";
       form.reset();
     } catch (error) {
-      statusEl.textContent = "送出失敗，請稍後再試，或改用 Bot / 私訊方式提交。";
       console.error("wanted form submit error:", error);
+      statusEl.textContent = "送出失敗，請稍後再試。";
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "送出願望";
