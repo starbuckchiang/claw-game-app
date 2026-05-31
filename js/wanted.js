@@ -48,17 +48,10 @@ function setupWantedForm() {
 
   const categoryInput = document.getElementById("wanted-category");
   const descInput = document.getElementById("wanted-desc");
-  const imageInput = document.getElementById("wanted-image");
   const nicknameInput = document.getElementById("wanted-nickname");
   const contactInput = document.getElementById("wanted-contact");
   const dateInput = document.getElementById("wanted-date");
   const timeInput = document.getElementById("wanted-time");
-
-  const gfDateYear = document.getElementById("gf-date-year");
-  const gfDateMonth = document.getElementById("gf-date-month");
-  const gfDateDay = document.getElementById("gf-date-day");
-  const gfTimeHour = document.getElementById("gf-time-hour");
-  const gfTimeMinute = document.getElementById("gf-time-minute");
 
   if (
     !form ||
@@ -66,46 +59,16 @@ function setupWantedForm() {
     !submitBtn ||
     !categoryInput ||
     !descInput ||
-    !imageInput ||
     !nicknameInput ||
     !contactInput ||
     !dateInput ||
-    !timeInput ||
-    !gfDateYear ||
-    !gfDateMonth ||
-    !gfDateDay ||
-    !gfTimeHour ||
-    !gfTimeMinute
+    !timeInput
   ) {
     return;
   }
 
   function setStatus(message) {
     statusEl.textContent = message;
-  }
-
-  function syncDateTimeToGoogleForm() {
-    const dateValue = (dateInput.value || "").trim();
-    const timeValue = (timeInput.value || "").trim();
-
-    gfDateYear.value = "";
-    gfDateMonth.value = "";
-    gfDateDay.value = "";
-    gfTimeHour.value = "";
-    gfTimeMinute.value = "";
-
-    if (dateValue) {
-      const [year, month, day] = dateValue.split("-");
-      gfDateYear.value = year || "";
-      gfDateMonth.value = month || "";
-      gfDateDay.value = day || "";
-    }
-
-    if (timeValue) {
-      const [hour, minute] = timeValue.split(":");
-      gfTimeHour.value = hour || "";
-      gfTimeMinute.value = minute || "";
-    }
   }
 
   function validateForm() {
@@ -155,35 +118,19 @@ function setupWantedForm() {
     return true;
   }
 
-  dateInput.addEventListener("change", syncDateTimeToGoogleForm);
-  timeInput.addEventListener("change", syncDateTimeToGoogleForm);
-
-  categoryInput.addEventListener("change", () => {
-    setStatus("請填好資料後送出，資料會開新分頁送進 Google Form。");
-  });
-
-  descInput.addEventListener("input", () => {
-    setStatus("請填好資料後送出，資料會開新分頁送進 Google Form。");
-  });
-
-  imageInput.addEventListener("input", () => {
-    setStatus("請填好資料後送出，資料會開新分頁送進 Google Form。");
-  });
-
-  nicknameInput.addEventListener("input", () => {
-    setStatus("請填好資料後送出，資料會開新分頁送進 Google Form。");
-  });
-
-  contactInput.addEventListener("input", () => {
-    setStatus("請填好資料後送出，資料會開新分頁送進 Google Form。");
-  });
-
   form.addEventListener("submit", (event) => {
-    syncDateTimeToGoogleForm();
-
     if (!validateForm()) {
       event.preventDefault();
       return;
+    }
+
+    const date = dateInput.value.trim();
+    const time = timeInput.value.trim();
+    const originalDesc = descInput.value.trim();
+
+    const dateTimeText = `\n希望時間：${date} ${time}`;
+    if (!originalDesc.includes("希望時間：")) {
+      descInput.value = `${originalDesc}${dateTimeText}`;
     }
 
     submitBtn.disabled = true;
